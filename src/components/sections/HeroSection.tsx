@@ -153,7 +153,7 @@ export default function HeroSection() {
             }}
           />
           <Image
-            src="/boy.png"
+            src="./boy.png"
             alt="Mohit Kumar"
             width={500}
             height={680}
