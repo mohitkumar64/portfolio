@@ -54,17 +54,17 @@ function HeroName() {
     ));
 
   return (
-    <div
-      aria-label="Mohit Kumar"
-      className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-25 w-full"
+    <h1
+      aria-label="Mohit Kumar — Software Engineer"
+      className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-25 w-full m-0"
     >
-      <div className="flex items-baseline leading-none" aria-hidden>
+      <span className="flex items-baseline leading-none" aria-hidden="true">
         {word("MOHIT", true, 0.1)}
-      </div>
-      <div className="flex items-baseline leading-none" aria-hidden>
+      </span>
+      <span className="flex items-baseline leading-none" aria-hidden="true">
         {word("KUMAR", false, 0.22)}
-      </div>
-    </div>
+      </span>
+    </h1>
   );
 }
 

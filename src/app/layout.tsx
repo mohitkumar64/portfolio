@@ -35,21 +35,47 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mohitkumar.qzz.io"),
   title: "Mohit Kumar — Software Engineer",
-  icons: {
-    icon: "./logo.svg"
-  },
   description:
     "Portfolio of Mohit Kumar, a Software Engineer who builds, explores, and creates. Let me show you my journey so far.",
   keywords: ["Mohit Kumar", "Software Engineer", "Portfolio", "Developer", "Tihmo", "mohit"],
-  authors: [{ name: "Mohit Kumar" }],
+  authors: [{ name: "Mohit Kumar", url: "https://mohitkumar.qzz.io" }],
+  creator: "Mohit Kumar",
+  alternates: {
+    canonical: "https://mohitkumar.qzz.io",
+  },
+  icons: {
+    icon: "/logo.svg",
+  },
   openGraph: {
     title: "Mohit Kumar — Software Engineer",
-    description: "Let me show you what I learn and how I learn it.",
+    description:
+      "Portfolio of Mohit Kumar, a Software Engineer who builds, explores, and creates. Let me show you my journey so far.",
+    url: "https://mohitkumar.qzz.io",
+    siteName: "Mohit Kumar Portfolio",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mohit Kumar — Software Engineer",
+    description:
+      "Portfolio of Mohit Kumar, a Software Engineer who builds, explores, and creates. Let me show you my journey so far.",
   },
 };
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Mohit Kumar",
+  url: "https://mohitkumar.qzz.io",
+  jobTitle: "Software Engineer",
+  sameAs: [
+    "https://github.com/mohitkumar64",
+    "https://www.linkedin.com/in/mohit-kumar-339a84330",
+  ],
+};
 
 export default function RootLayout({
   children,
@@ -61,6 +87,14 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} ${dancingScript.variable} ${playfair.variable} ${jetbrains.variable}`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personSchema),
+          }}
+        />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );
