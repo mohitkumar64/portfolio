@@ -1,150 +1,216 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Home, User, FolderKanban, Send } from "lucide-react";
 
 const navItems = [
-  { label: "Home",     icon: Home,         href: "#home"    },
-  { label: "About Me", icon: User,         href: "#about"   },
-  { label: "Projects", icon: FolderKanban, href: "#projects"},
-  { label: "Connect",  icon: Send,         href: "#connect", accent: true },
+  { label: "Home", icon: Home, href: "#home" },
+  { label: "About Me", icon: User, href: "#about" },
+  { label: "Projects", icon: FolderKanban, href: "#projects" },
+  { label: "Connect", icon: Send, href: "#connect", accent: true },
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const LABEL_WIDTH = 72;
 
+/* Scroll-spy: index of the section currently in view */
+function useActiveSection() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const ids = navItems.map((n) => n.href.slice(1));
+    const onScroll = () => {
+      const mid = window.innerHeight * 0.4;
+      let current = 0;
+      ids.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= mid) current = i;
+      });
+      setActive(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return [active, setActive] as const;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    TOP NAV — desktop (md+)
-   Matches reference: logo left, plain spaced text links right,
-   thin underline on active, transparent background.
+   Transparent at top, morphs into a floating glass pill on scroll.
+   Sliding highlight and scroll-spy.
 ═══════════════════════════════════════════════════════════════ */
 function TopNav() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useActiveSection();
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const shown = hovered ?? active;
 
   return (
     <motion.header
-      initial={{ y: -60, opacity: 0 }}
+      initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease }}
-      className="hidden md:flex fixed top-0 inset-x-0 z-50 items-center justify-between"
+      transition={{ duration: 0.8, ease, delay: 0.2 }}
+      className="hidden md:flex fixed top-0 inset-x-0 z-50 justify-center pointer-events-none"
       style={{
-        height: 60,
-        paddingInline: "clamp(24px, 4vw, 64px)",
+        paddingTop: scrolled ? 14 : 18,
+        transition: "padding .5s cubic-bezier(.22,1,.36,1)",
       }}
       role="banner"
     >
-      {/* ── Logo ── */}
-      <motion.a
-        href="#home"
-        aria-label="Home"
-        className="relative flex items-center justify-center shrink-0 focus:outline-none"
-        style={{ width: 38, height: 38 }}
-        onClick={() => setActive(0)}
-        whileHover="hover"
-        initial="rest"
+      <div
+        className="pointer-events-auto flex items-center justify-between"
+        style={{
+          width: scrolled ? "min(880px, 92vw)" : "100%",
+          paddingInline: scrolled ? 14 : "clamp(24px, 4vw, 64px)",
+          height: scrolled ? 56 : 52,
+          borderRadius: 9999,
+          background: scrolled ? "rgba(14,14,16,0.62)" : "rgba(14,14,16,0)",
+          backdropFilter: scrolled ? "blur(22px) saturate(1.5)" : "blur(0px)",
+          WebkitBackdropFilter: scrolled
+            ? "blur(22px) saturate(1.5)"
+            : "blur(0px)",
+          border: scrolled
+            ? "1px solid rgba(255,255,255,0.09)"
+            : "1px solid transparent",
+          boxShadow: scrolled
+            ? "0 10px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)"
+            : "none",
+          transition: "all .6s cubic-bezier(.22,1,.36,1)",
+          position: "relative",
+          overflow: "hidden",
+        }}
       >
-        <motion.span
-          variants={{
-            rest:  { scale: 1,    opacity: 0.55 },
-            hover: { scale: 1.15, opacity: 1    },
-          }}
-          transition={{ type: "spring", stiffness: 380, damping: 22 }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "50%",
-            border: "1.5px solid #e8814a",
-          }}
-        />
-        <motion.span
-          variants={{
-            rest:  { scale: 1   },
-            hover: { scale: 1.3 },
-          }}
-          transition={{ type: "spring", stiffness: 380, damping: 22 }}
-          style={{
-            width: 12,
-            height: 12,
-            borderRadius: "50%",
-            background: "#e8814a",
-            boxShadow: "0 0 12px rgba(232,129,74,0.6)",
-          }}
-        />
-      </motion.a>
-
-      {/* ── Nav links ── */}
-      <nav role="navigation" aria-label="Main">
-        <ul
-          className="flex items-center"
-          style={{ gap: "clamp(20px, 3.5vw, 48px)" }}
-          role="list"
+        {/* Logo */}
+        <motion.a
+          href="#home"
+          aria-label="Home"
+          className="relative flex items-center justify-center shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a]"
+          style={{ width: 38, height: 38 }}
+          whileHover="hover"
+          whileTap={{ scale: 0.92 }}
+          initial="rest"
         >
-          {navItems.map((item, idx) => {
-            const isActive = active === idx;
+          <motion.span
+            variants={{
+              rest: { scale: 1, opacity: 0.6, rotate: 0 },
+              hover: { scale: 1.12, opacity: 1, rotate: 90 },
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "50%",
+              border: "1.5px dashed #e8814a",
+            }}
+          />
+          <motion.span
+            variants={{ rest: { scale: 1 }, hover: { scale: 1.35 } }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: "50%",
+              background: "#e8814a",
+              boxShadow: "0 0 14px rgba(232,129,74,0.7)",
+            }}
+          />
+        </motion.a>
 
-            return (
-              <li key={item.label} role="listitem">
-                <motion.a
-                  href={item.href}
-                  aria-current={isActive ? "page" : undefined}
-                  className="relative flex items-center gap-2 focus:outline-none"
-                  style={{
-                    fontSize: "clamp(0.78rem, 1.1vw, 0.9rem)",
-                    fontWeight: isActive ? 600 : 400,
-                    letterSpacing: "0.04em",
-                    color: item.accent
-                      ? "#e8814a"
-                      : isActive
-                      ? "#f5f5f5"
-                      : "#aaa",
-                    textDecoration: "none",
-                    paddingBottom: 2,
-                  }}
-                  onClick={() => setActive(idx)}
-                  whileHover={{ color: item.accent ? "#e8814a" : "#f5f5f5" }}
-                  whileTap={{ scale: 0.96 }}
-                >
-                  {item.label}
-
-                  {/* Thin underline on active */}
-                  <AnimatePresence>
-                    {isActive && !item.accent && (
-                      <motion.span
-                        layoutId="nav-underline"
-                        className="absolute bottom-0 inset-x-0"
-                        style={{
-                          height: 1,
-                          background: "rgba(245,245,245,0.55)",
-                          bottom: -2,
-                        }}
-                        initial={{ scaleX: 0, opacity: 0 }}
-                        animate={{ scaleX: 1, opacity: 1 }}
-                        exit={{ scaleX: 0, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </AnimatePresence>
-
-                  {/* Pulsing dot for Connect */}
-                  {item.accent && (
-                    <span className="flex" style={{ width: 6, height: 6 }}>
-                      <span
-                        className="absolute inline-flex h-full w-full rounded-full animate-ping"
-                        style={{ background: "#e8814a", opacity: 0.5 }}
-                      />
-                      <span
-                        className="relative inline-flex rounded-full h-full w-full"
-                        style={{ background: "#e8814a" }}
-                      />
-                    </span>
+        {/* Links */}
+        <nav aria-label="Main" onMouseLeave={() => setHovered(null)}>
+          <ul className="flex items-center" style={{ gap: 2 }}>
+            {navItems.map((item, idx) => {
+              const isActive = active === idx;
+              return (
+                <li key={item.label} className="relative">
+                  {shown === idx && (
+                    <motion.span
+                      layoutId="nav-highlight"
+                      aria-hidden
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: item.accent
+                          ? "rgba(232,129,74,0.16)"
+                          : "rgba(255,255,255,0.08)",
+                      }}
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
                   )}
-                </motion.a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+                  <a
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => setActive(idx)}
+                    onMouseEnter={() => setHovered(idx)}
+                    onFocus={() => setHovered(idx)}
+                    onBlur={() => setHovered(null)}
+                    className="relative flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a]"
+                    style={{
+                      padding: "9px 18px",
+                      fontSize: "clamp(0.8rem, 1.05vw, 0.92rem)",
+                      fontWeight: isActive ? 600 : 500,
+                      letterSpacing: "0.03em",
+                      color: item.accent
+                        ? "#f2955f"
+                        : isActive || shown === idx
+                        ? "#fff"
+                        : "#9a9aa2",
+                      transition: "color .25s",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {item.label}
+                    {item.accent && (
+                      <span
+                        className="relative flex"
+                        style={{ width: 6, height: 6 }}
+                      >
+                        <span
+                          className="absolute inline-flex h-full w-full rounded-full animate-ping"
+                          style={{ background: "#e8814a", opacity: 0.5 }}
+                        />
+                        <span
+                          className="relative inline-flex rounded-full h-full w-full"
+                          style={{ background: "#e8814a" }}
+                        />
+                      </span>
+                    )}
+                  </a>
+                  {isActive && !item.accent && (
+                    <motion.span
+                      layoutId="nav-dot"
+                      aria-hidden
+                      className="absolute left-1/2 rounded-full"
+                      style={{
+                        width: 4,
+                        height: 4,
+                        bottom: 2,
+                        x: "-50%",
+                        background: "#e8814a",
+                        boxShadow: "0 0 8px #e8814a",
+                      }}
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+
+      </div>
     </motion.header>
   );
 }
@@ -153,16 +219,15 @@ function TopNav() {
    BOTTOM PILL NAV — mobile (< md)
 ═══════════════════════════════════════════════════════════════ */
 function BottomPillNav() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useActiveSection();
 
   return (
     <motion.nav
       aria-label="Bottom Navigation"
-      role="navigation"
       className="fixed bottom-4 inset-x-0 mx-auto z-50 flex md:hidden w-fit"
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 260, damping: 22, delay: 0.5 }}
+      transition={{ type: "spring", stiffness: 260, damping: 24, delay: 0.5 }}
     >
       <div
         className="flex items-center"
@@ -170,16 +235,16 @@ function BottomPillNav() {
           gap: 4,
           padding: "6px 8px",
           borderRadius: 9999,
-          background: "rgba(14,14,14,0.94)",
+          background: "rgba(14,14,14,0.8)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           border: "1px solid rgba(255,255,255,0.09)",
           boxShadow:
-            "0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 1px rgba(232,129,74,0.06)",
+            "0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04)",
         }}
       >
         {navItems.map((item, idx) => {
-          const Icon     = item.icon;
+          const Icon = item.icon;
           const isActive = active === idx;
 
           return (
@@ -193,8 +258,10 @@ function BottomPillNav() {
                 padding: isActive ? "0 14px" : "0 11px",
                 overflow: "hidden",
                 color: isActive
-                  ? item.accent ? "#e8814a" : "#f0f0f0"
-                  : "#666",
+                  ? item.accent
+                    ? "#e8814a"
+                    : "#f0f0f0"
+                  : "#777",
                 background: isActive
                   ? item.accent
                     ? "rgba(232,129,74,0.14)"
@@ -206,32 +273,38 @@ function BottomPillNav() {
                     : "1px solid rgba(255,255,255,0.07)"
                   : "1px solid transparent",
                 minWidth: 40,
+                transition: "all .3s cubic-bezier(.22,1,.36,1)",
               }}
               onClick={() => setActive(idx)}
               whileTap={{ scale: 0.93 }}
             >
-              <Icon size={18} strokeWidth={isActive ? 2.2 : 1.7} aria-hidden className="shrink-0" />
+              <Icon
+                size={18}
+                strokeWidth={isActive ? 2.2 : 1.7}
+                aria-hidden
+                className="shrink-0"
+              />
 
               <motion.span
                 aria-hidden
                 initial={false}
                 animate={{
-                  width:      isActive ? LABEL_WIDTH : 0,
-                  opacity:    isActive ? 1 : 0,
+                  width: isActive ? LABEL_WIDTH : 0,
+                  opacity: isActive ? 1 : 0,
                   marginLeft: isActive ? 6 : 0,
                 }}
                 transition={{
-                  width:      { type: "spring", stiffness: 340, damping: 32 },
-                  opacity:    { duration: 0.14 },
+                  width: { type: "spring", stiffness: 340, damping: 32 },
+                  opacity: { duration: 0.14 },
                   marginLeft: { duration: 0.14 },
                 }}
                 style={{
-                  overflow:    "hidden",
-                  whiteSpace:  "nowrap",
-                  fontSize:    11,
-                  fontWeight:  600,
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  fontSize: 11,
+                  fontWeight: 600,
                   letterSpacing: "0.04em",
-                  display:     "inline-block",
+                  display: "inline-block",
                 }}
               >
                 {item.label}

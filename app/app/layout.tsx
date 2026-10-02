@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, Dancing_Script } from "next/font/google";
+import { Inter, Space_Grotesk, Dancing_Script, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,6 +17,20 @@ const spaceGrotesk = Space_Grotesk({
 const dancingScript = Dancing_Script({
   variable: "--font-dancing-script",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  style: ["italic", "normal"],
+  weight: ["600", "700"],
   display: "swap",
 });
 
@@ -41,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${dancingScript.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${dancingScript.variable} ${playfair.variable} ${jetbrains.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>
