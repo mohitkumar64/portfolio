@@ -42,9 +42,9 @@ function HeroName() {
             willChange: "transform",
             ...(outline
               ? {
-                  WebkitTextStroke: "2px rgba(245,245,245,0.85)",
-                  color: "transparent",
-                }
+                WebkitTextStroke: "2px rgba(245,245,245,0.85)",
+                color: "transparent",
+              }
               : { color: "#f5f5f5" }),
           }}
         >
@@ -321,31 +321,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* ── SCROLL INDICATOR ── */}
-      <motion.div
-        aria-hidden
-        className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
-        style={{ opacity: contentOpacity }}
-      >
-        <div
-          className="overflow-hidden"
-          style={{ width: 1, height: 44, background: "rgba(255,255,255,0.08)" }}
-        >
-          <motion.div
-            style={{
-              width: "100%",
-              height: "45%",
-              background: "rgba(232,129,74,0.8)",
-            }}
-            animate={{ y: ["-100%", "230%"] }}
-            transition={{
-              duration: 1.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              repeatDelay: 0.3,
-            }}
-          />
-        </div>
-      </motion.div>
+
     </section>
   );
 }

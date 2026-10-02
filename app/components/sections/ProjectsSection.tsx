@@ -64,53 +64,68 @@ export default function ProjectsSection() {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-6xl px-6 pb-24 pt-28 sm:px-10 sm:pt-32">
-        {/* ── HEADER ── */}
+      <div className="relative mx-auto w-full max-w-[1500px] px-6 pb-24 pt-28 sm:px-10 lg:px-16">
+        {/* ── HEADER (matches About section pattern) ── */}
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "0px 0px -10% 0px" }}
         >
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 14 },
-              show: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease },
-              },
-            }}
-            className="flex items-center gap-3"
-          >
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 14 },
+            show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } },
+          }} className="flex items-center gap-5">
+            <motion.span
+              variants={{
+                hidden: { scaleX: 0 },
+                show: { scaleX: 1, transition: { duration: 1, ease } },
+              }}
+              className="block h-px w-14 origin-left bg-white/40"
+            />
             <span
-              className="text-[10px] tracking-[0.3em] text-[#e8814a]"
+              className="text-[11px] tracking-[0.22em] text-neutral-400"
               style={{ fontFamily: mono }}
             >
-              /02
-            </span>
-            <span className="h-px w-10 bg-[#e8814a]/50" />
-            <span
-              className="text-[10px] tracking-[0.3em] text-neutral-500"
-              style={{ fontFamily: mono }}
-            >
-              SELECTED WORK
+              02 / PROJECTS
             </span>
           </motion.div>
 
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 14 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.8, ease, delay: 0.06 } },
+            }}
+            className="mt-8 flex items-center gap-3 text-[10px] tracking-[0.2em] text-neutral-400 sm:text-[11px]"
+            style={{ fontFamily: mono }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#e8814a] shadow-[0_0_10px_#e8814a]" />
+            CONCEPT → CODE → SHIP
+          </motion.div>
+
           <h2
-            className="mt-5 text-[clamp(2rem,5.5vw,3.4rem)] font-bold uppercase text-white"
+            className="mt-5"
             style={{
               fontFamily: grotesk,
               letterSpacing: "-0.02em",
-              lineHeight: 1.05,
+              lineHeight: 1.04,
+              textTransform: "uppercase" as const,
             }}
           >
-            <Line>Things I&apos;ve</Line>
+            <Line>
+              <span
+                className="font-semibold text-white"
+                style={{ fontSize: "clamp(2.1rem, 4.6vw, 4.1rem)" }}
+              >
+                Things I&apos;ve
+              </span>
+            </Line>
             <Line>
               <motion.span
+                className="font-bold"
                 style={{
-                  background:
+                  fontSize: "clamp(2.1rem, 4.6vw, 4.1rem)",
+                  backgroundImage:
                     "linear-gradient(90deg, #ffd9bd 0%, #f2a878 45%, #fff 100%)",
                   backgroundSize: "220% 100%",
                   WebkitBackgroundClip: "text",
@@ -140,11 +155,10 @@ export default function ProjectsSection() {
                 transition: { duration: 0.9, ease, delay: 0.15 },
               },
             }}
-            className="mt-4 max-w-xl text-sm leading-relaxed text-neutral-400 sm:text-base"
-            style={{ fontFamily: mono }}
+            className="mt-8 max-w-[34rem] text-[15px] leading-[1.75] text-neutral-400 sm:text-base"
+            style={{ fontFamily: grotesk }}
           >
-            A few things I&apos;ve shipped — hover or tap a panel to open it.
-            Demo info for now; real projects coming soon.
+            A few things I&apos;ve shipped — hover or tap a panel to explore.
           </motion.p>
         </motion.div>
 

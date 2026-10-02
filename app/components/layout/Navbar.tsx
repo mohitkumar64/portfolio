@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Home, User, FolderKanban, Send } from "lucide-react";
+import { Home, User, FolderKanban, Layers, Send } from "lucide-react";
+import Image from "next/image";
 
 const navItems = [
   { label: "Home", icon: Home, href: "#home" },
   { label: "About Me", icon: User, href: "#about" },
   { label: "Projects", icon: FolderKanban, href: "#projects" },
+  { label: "Skills", icon: Layers, href: "#skills" },
   { label: "Connect", icon: Send, href: "#connect", accent: true },
 ];
 
@@ -102,30 +104,7 @@ function TopNav() {
           whileTap={{ scale: 0.92 }}
           initial="rest"
         >
-          <motion.span
-            variants={{
-              rest: { scale: 1, opacity: 0.6, rotate: 0 },
-              hover: { scale: 1.12, opacity: 1, rotate: 90 },
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "50%",
-              border: "1.5px dashed #e8814a",
-            }}
-          />
-          <motion.span
-            variants={{ rest: { scale: 1 }, hover: { scale: 1.35 } }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            style={{
-              width: 12,
-              height: 12,
-              borderRadius: "50%",
-              background: "#e8814a",
-              boxShadow: "0 0 14px rgba(232,129,74,0.7)",
-            }}
-          />
+          <Image src="/logo.svg" alt="Logo" width={30} height={30} />
         </motion.a>
 
         {/* Links */}
@@ -164,8 +143,8 @@ function TopNav() {
                       color: item.accent
                         ? "#f2955f"
                         : isActive || shown === idx
-                        ? "#fff"
-                        : "#9a9aa2",
+                          ? "#fff"
+                          : "#9a9aa2",
                       transition: "color .25s",
                       textDecoration: "none",
                     }}

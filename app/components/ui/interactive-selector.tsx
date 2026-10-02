@@ -48,8 +48,8 @@ const demoProjects: Project[] = [
       "Node.js",
       "WebSockets",
     ],
-    image: "",
-    link: "#",
+    image: "./edgeids.png",
+    link: "https://github.com/mohitkumar64/EdgeIDS",
     icon: ShieldCheck,
   },
 
@@ -66,8 +66,8 @@ const demoProjects: Project[] = [
       "AWS RDS",
       "Docker",
     ],
-    image: "",
-    link: "#",
+    image: "./atlas.png",
+    link: "https://github.com/Abhinav-0709/atlas",
     icon: Network,
   },
 
@@ -83,8 +83,8 @@ const demoProjects: Project[] = [
       "Framer Motion",
       "Tailwind CSS",
     ],
-    image: "",
-    link: "#",
+    image: "./3dportfolio.png",
+    link: "https://portfolio3d-three-zeta.vercel.app/",
     icon: Box,
   },
   {
@@ -100,8 +100,8 @@ const demoProjects: Project[] = [
       "Embeddings",
       "MongoDB",
     ],
-    image: "",
-    link: "#",
+    image: "./ats.png",
+    link: "https://ats-two-gold.vercel.app/",
     icon: FileSearch,
   },
 ];

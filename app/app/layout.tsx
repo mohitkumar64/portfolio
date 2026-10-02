@@ -36,9 +36,12 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Mohit Kumar — Software Engineer",
+  icons: {
+    icon: "./logo.svg"
+  },
   description:
     "Portfolio of Mohit Kumar, a Software Engineer who builds, explores, and creates. Let me show you my journey so far.",
-  keywords: ["Mohit Kumar", "Software Engineer", "Portfolio", "Developer", "Tihmo"],
+  keywords: ["Mohit Kumar", "Software Engineer", "Portfolio", "Developer", "Tihmo", "mohit"],
   authors: [{ name: "Mohit Kumar" }],
   openGraph: {
     title: "Mohit Kumar — Software Engineer",
@@ -46,6 +49,7 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
 
 export default function RootLayout({
   children,
