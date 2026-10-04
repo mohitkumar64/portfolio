@@ -9,19 +9,10 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import {
-  Mail,
-  Copy,
-  Check,
-  Globe,
-  Radio,
-  Clock,
-  MapPin,
-  Sparkles,
-  ArrowUpRight,
-} from "lucide-react";
+import { Mail, Copy, Check } from "lucide-react";
 import Image from "next/image";
 import MinimalistDock, { type DockItem } from "@/components/ui/minimal-dock";
+import BlobChatAssistant from "@/components/ui/BlobChatAssistant";
 
 /* ─── theme tokens ─────────────────────────────────────────────── */
 const mono = "var(--font-jetbrains, 'JetBrains Mono'), ui-monospace, monospace";
@@ -76,64 +67,6 @@ function LinkedInIcon({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
-/* ─── Live India Clock ─────────────────────────────────────────── */
-function IndiaClock() {
-  const [timeStr, setTimeStr] = useState<string>("");
-  const [isNight, setIsNight] = useState(false);
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const istOptions: Intl.DateTimeFormatOptions = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      };
-      const formatter = new Intl.DateTimeFormat("en-US", istOptions);
-      setTimeStr(formatter.format(now));
-
-      const istHour = parseInt(
-        new Intl.DateTimeFormat("en-US", {
-          timeZone: "Asia/Kolkata",
-          hour: "numeric",
-          hour12: false,
-        }).format(now),
-        10
-      );
-      setIsNight(istHour < 6 || istHour >= 19);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur-md">
-      <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-      </span>
-      <span
-        className="text-[11px] font-mono tracking-wider text-neutral-300"
-        style={{ fontFamily: mono }}
-      >
-        {timeStr ? (
-          <>
-            <span className="text-white font-medium">{timeStr}</span>
-            <span className="text-neutral-400 ml-1.5 text-[10px]">
-              IST (UTC+5:30) {isNight ? "🌙" : "☀️"}
-            </span>
-          </>
-        ) : (
-          <span className="text-neutral-500">CALCULATING IST...</span>
-        )}
-      </span>
-    </div>
-  );
-}
 
 /* ═══════════════════════════════════════════════════════════════
    CONNECT SECTION
@@ -167,16 +100,16 @@ export default function ConnectSection() {
   const dockConnectItems: DockItem[] = [
     {
       id: "email",
-      icon: <Mail size={20} className="text-[#e8814a] transition-colors" />,
+      icon: <Mail size={24} className="text-[#e8814a] transition-colors" />,
       label: "Email: mohitkumar.dev@gmail.com",
       href: "mailto:mohitkumar.dev@gmail.com",
     },
     {
       id: "copy",
       icon: copied ? (
-        <Check size={20} className="text-emerald-400" />
+        <Check size={24} className="text-emerald-400" />
       ) : (
-        <Copy size={20} className="text-neutral-300 hover:text-white" />
+        <Copy size={24} className="text-neutral-300 hover:text-white" />
       ),
       label: copied ? "Copied to clipboard!" : "Copy Email",
       onClick: handleCopyEmail,
@@ -184,7 +117,7 @@ export default function ConnectSection() {
     {
       id: "github",
       icon: (
-        <div className="relative h-5 w-5">
+        <div className="relative h-6 w-6">
           <Image
             src="/logo/github.svg"
             alt="GitHub"
@@ -198,7 +131,7 @@ export default function ConnectSection() {
     },
     {
       id: "linkedin",
-      icon: <LinkedInIcon className="w-5 h-5 text-[#38bdf8]" />,
+      icon: <LinkedInIcon className="w-6 h-6 text-[#38bdf8]" />,
       label: "LinkedIn: Mohit Kumar",
       href: "https://www.linkedin.com/in/mohit-kumar-339a84330",
     },
@@ -340,119 +273,18 @@ export default function ConnectSection() {
                 <MinimalistDock items={dockConnectItems} />
               </div>
             </div>
-
-            {/* Quick status indicators */}
-            <div className="flex flex-wrap items-center gap-6 pt-2 text-[12px] text-neutral-400" style={{ fontFamily: mono }}>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-                <span>Inbox Monitored</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#e8814a] shadow-[0_0_8px_#e8814a]" />
-                <span>Open for Opportunities</span>
-              </div>
-            </div>
           </motion.div>
 
-          {/* Right Column: Clean Telemetry Side Hub (6 cols) */}
+          {/* Right Column: Feral Blob Mascot + Simple Input (6 cols) */}
           <motion.div
             style={{ y: reduce ? 0 : sideY }}
             variants={rise}
             initial="hidden"
             whileInView="show"
             viewport={IN_VIEW}
-            className="flex flex-col gap-5 lg:col-span-6"
+            className="flex flex-col items-center justify-center lg:col-span-6"
           >
-            {/* Ambient Glass Telemetry Card */}
-            <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0e0e12]/80 p-6 sm:p-7 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.45)]">
-              {/* Top ambient highlight */}
-              <div
-                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e8814a]/30 to-transparent"
-                aria-hidden
-              />
-
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-                <div className="flex items-center gap-2">
-                  <Globe size={15} className="text-[#e8814a]" />
-                  <span
-                    className="text-[11px] font-mono tracking-wider text-neutral-300 font-semibold uppercase"
-                    style={{ fontFamily: mono }}
-                  >
-                    LIVE PRESENCE
-                  </span>
-                </div>
-                <IndiaClock />
-              </div>
-
-              <div className="mt-5 space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-                    <Radio size={14} className="animate-pulse" />
-                  </div>
-                  <div>
-                    <span
-                      className="block text-[10px] tracking-wider text-neutral-400 uppercase"
-                      style={{ fontFamily: mono }}
-                    >
-                      CURRENT STATUS
-                    </span>
-                    <p
-                      className="text-[13px] font-medium text-neutral-200 mt-0.5"
-                      style={{ fontFamily: grotesk }}
-                    >
-                      Available for select opportunities & engineering roles
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-neutral-300">
-                    <MapPin size={14} />
-                  </div>
-                  <div>
-                    <span
-                      className="block text-[10px] tracking-wider text-neutral-400 uppercase"
-                      style={{ fontFamily: mono }}
-                    >
-                      LOCATION
-                    </span>
-                    <p
-                      className="text-[13px] font-medium text-neutral-200 mt-0.5"
-                      style={{ fontFamily: grotesk }}
-                    >
-                      India (New Delhi) • 28.6139° N, 77.2090° E
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick direct chat invitation */}
-              <div className="mt-6 rounded-2xl border border-white/[0.06] bg-black/40 p-4">
-                <div className="flex items-center gap-2.5 text-[#e8814a]">
-                  <Sparkles size={15} />
-                  <span
-                    className="text-[11px] font-semibold tracking-wider uppercase"
-                    style={{ fontFamily: mono }}
-                  >
-                    15-Minute Sync
-                  </span>
-                </div>
-                <p
-                  className="mt-1.5 text-[12px] text-neutral-400 leading-relaxed"
-                  style={{ fontFamily: grotesk }}
-                >
-                  Prefer a short voice/video discussion over Google Meet or Discord?
-                  Feel free to request a sync anytime.
-                </p>
-                <a
-                  href="mailto:mohitkumar.dev@gmail.com?subject=Quick%2015-Minute%20Introductory%20Sync"
-                  className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-[#e8814a] hover:underline"
-                  style={{ fontFamily: mono }}
-                >
-                  REQUEST A CALL ↗
-                </a>
-              </div>
-            </div>
+            <BlobChatAssistant />
           </motion.div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "feral-blob/blob.css";
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
@@ -97,3 +98,29 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
+/* ─── Feral Blob Amber Theme Tokens ──────────────────────────── */
+.blob-amber-theme {
+  --jelly-body-top: #ffeedd;
+  --jelly-body-mid: #f08244;
+  --jelly-body-deep: #b84c17;
+  --jelly-body-rim: #ffa775;
+  --jelly-outline: #8d360f;
+  --jelly-outline-light: #ea7f46;
+  --jelly-arm-light: #fdd8c2;
+  --jelly-arm-mid: #e8814a;
+  --jelly-arm-deep: #a03f13;
+  --jelly-cheek-light: #ffece2;
+  --jelly-cheek: #fca780;
+  --jelly-cheek-deep: #ea6c35;
+  --jelly-eye-light: #3d1c10;
+  --jelly-eye: #1c0b05;
+  --jelly-eye-deep: #100602;
+  --jelly-face-ink: #1c0b05;
+  --jelly-face-soft: #3d1c10;
+  --jelly-belly-glow: #fedbc8;
+  --jelly-eye-sparkle: #ff8e52;
+  --jelly-shadow: rgba(232, 129, 74, 0.45);
+  --jelly-shadow-light: rgba(232, 129, 74, 0.2);
+}
+

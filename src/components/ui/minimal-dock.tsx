@@ -31,14 +31,14 @@ export const DockItemComponent: React.FC<DockItemProps> = ({ item, isHovered, on
     <div
       className={`
         relative flex items-center justify-center
-        w-11 h-11 rounded-lg
+        w-14 h-14 rounded-2xl
         bg-white/5 backdrop-blur-[2px]
         border border-white/10
         transition-all duration-300 ease-out
         cursor-pointer
         shadow-none
         ${isHovered 
-          ? 'scale-110 bg-white/10 border-white/20 -translate-y-1 shadow-lg shadow-white/10' 
+          ? 'scale-110 bg-white/10 border-white/20 -translate-y-1.5 shadow-xl shadow-white/10' 
           : 'hover:scale-105 hover:bg-white/7 hover:-translate-y-0.5'
         }
       `}
@@ -115,7 +115,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
     <div className={`relative ${className}`}>
       {/* Dock Container */}
       <div className={`
-        flex items-end gap-3 px-6 py-4
+        flex items-end gap-4 px-7 py-5
         rounded-2xl
         bg-black/40 backdrop-blur-xl
         border border-white/10
@@ -132,15 +132,27 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
           />
         ))}
       </div>
-      
-      {/* Reflection Effect */}
-      <div className="absolute top-full left-0 right-0 h-16 overflow-hidden pointer-events-none">
+
+      {/* Soft Ambient Depth Glow underneath */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-4 left-1/2 -translate-x-1/2 h-12 w-[85%] rounded-full bg-black/90 blur-xl"
+      />
+
+      {/* Reflection Effect with smooth fade to transparent */}
+      <div 
+        className="absolute top-full left-0 right-0 mt-1 h-32 overflow-hidden pointer-events-none"
+        style={{
+          maskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 95%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 95%)',
+        }}
+      >
         <div className={`
-          flex items-start gap-3 px-6 py-4
+          flex items-start gap-4 px-7 py-5
           rounded-2xl
           bg-black/20 backdrop-blur-xl
           border border-white/5
-          opacity-30
+          opacity-25
           transform scale-y-[-1]
           transition-all duration-500 ease-out
           ${hoveredItem ? 'scale-105 scale-y-[-1.05]' : ''}
@@ -150,7 +162,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
               key={`reflection-${item.id}`}
               className={`
                 flex items-center justify-center
-                w-11 h-11 rounded-lg
+                w-14 h-14 rounded-2xl
                 bg-white/5
                 transition-all duration-300 ease-out
                 ${hoveredItem === item.id 

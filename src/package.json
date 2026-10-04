@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "feral-blob": "^0.2.0",
     "framer-motion": "^13.4.6",
     "lenis": "^1.3.26",
     "lucide-react": "^1.49.0",
