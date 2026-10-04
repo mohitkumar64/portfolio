@@ -13,6 +13,7 @@ import TihmoSignature from "@/components/ui/TihmoSignature";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const grotesk = "var(--font-space-grotesk, 'Space Grotesk'), sans-serif";
+const mono = "var(--font-jetbrains, 'JetBrains Mono'), ui-monospace, monospace";
 
 
 /* ─── Hero Name ───────────────────────────────────────────── */
@@ -21,11 +22,11 @@ function HeroName() {
     text.split("").map((char, i) => (
       <span
         key={`${text}-${i}`}
-        className="block overflow-hidden text-[21vw] md:text-[clamp(4.4rem,13.5vw,23rem)]"
-        style={{ paddingBottom: "0.06em" }}
+        className="block overflow-hidden select-none pointer-events-none text-[14vw] sm:text-[15vw] md:text-[clamp(4.4rem,13.5vw,23rem)]"
+        style={{ paddingBottom: "0.06em", userSelect: "none", WebkitUserSelect: "none" }}
       >
         <motion.span
-          className="block"
+          className="block select-none"
           initial={{ y: "105%", rotate: 6, opacity: 0 }}
           animate={{ y: "0%", rotate: 0, opacity: 1 }}
           transition={{
@@ -40,9 +41,11 @@ function HeroName() {
             lineHeight: 0.85,
             letterSpacing: "-0.03em",
             willChange: "transform",
+            userSelect: "none",
+            WebkitUserSelect: "none",
             ...(outline
               ? {
-                WebkitTextStroke: "2px rgba(245,245,245,0.85)",
+                WebkitTextStroke: "1.5px rgba(245,245,245,0.85)",
                 color: "transparent",
               }
               : { color: "#f5f5f5" }),
@@ -56,7 +59,7 @@ function HeroName() {
   return (
     <h1
       aria-label="Mohit Kumar — Software Engineer"
-      className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-25 w-full m-0"
+      className="select-none pointer-events-none flex flex-row items-center justify-center gap-3 sm:gap-4 md:gap-20 w-full m-0 whitespace-nowrap"
     >
       <span className="flex items-baseline leading-none" aria-hidden="true">
         {word("MOHIT", true, 0.1)}
@@ -98,8 +101,8 @@ export default function HeroSection() {
       ref={ref}
       id="home"
       aria-label="Hero"
-      className="relative w-full overflow-hidden"
-      style={{ height: "100svh", minHeight: 600, background: "#0a0a0a" }}
+      className="relative w-full overflow-hidden h-[75svh] min-h-[520px] md:h-[100svh] md:min-h-[560px]"
+      style={{ background: "#0a0a0a" }}
     >
       {/* Ambient glow */}
       <motion.div
@@ -108,13 +111,13 @@ export default function HeroSection() {
         style={{
           opacity: glowOpacity,
           background:
-            "radial-gradient(ellipse 70% 55% at 50% 100%, rgba(232,129,74,0.12) 0%, transparent 70%)",
+            "radial-gradient(ellipse 70% 55% at 50% 100%, rgba(232,129,74,0.14) 0%, transparent 70%)",
         }}
       />
 
       {/* ── NAME (behind boy) ── */}
       <motion.div
-        className="absolute inset-x-0 z-0 pointer-events-none select-none top-[28%] md:top-[35%]"
+        className="absolute inset-x-0 z-0 pointer-events-none select-none top-[20%] md:top-[35%]"
         style={{
           y: nameY,
           scale: nameScale,
@@ -127,7 +130,7 @@ export default function HeroSection() {
 
       {/* ── BOY ── */}
       <motion.div
-        className="absolute bottom-0 z-10 pointer-events-none"
+        className="absolute bottom-0 z-10 pointer-events-none flex justify-center items-end"
         style={{
           left: "50%",
           x: "-50%",
@@ -137,54 +140,40 @@ export default function HeroSection() {
         }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.3, ease, delay: 0.15 }}
+          transition={{ duration: 1.2, ease, delay: 0.15 }}
+          className="relative flex justify-center items-end"
         >
+          {/* Ambient rim glow */}
           <div
             aria-hidden
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2"
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none"
             style={{
-              width: "clamp(180px, 28vw, 1000px)",
-              height: "clamp(80px, 14vw, 1000px)",
+              width: "clamp(260px, 85vw, 650px)",
+              height: "clamp(180px, 45vh, 480px)",
               background:
-                "radial-gradient(ellipse at 50% 100%, rgba(232,129,74,0.30) 0%, transparent 70%)",
-              filter: "blur(24px)",
+                "radial-gradient(ellipse at 50% 80%, rgba(232,129,74,0.42) 0%, rgba(232,129,74,0.12) 40%, transparent 75%)",
+              filter: "blur(28px)",
             }}
           />
           <Image
-            src="./boy.png"
+            src="/boy.png"
             alt="Mohit Kumar"
-            width={500}
-            height={680}
+            width={1312}
+            height={1199}
             priority
-            style={{
-              width: "clamp(270px, 44vw, 1200px)",
-              height: "auto",
-              maxHeight: "130vh",
-              objectFit: "contain",
-              objectPosition: "bottom",
-              filter: "drop-shadow(0 -20px 80px rgba(232,129,74,0.18))",
-            }}
+            unoptimized
+            className="w-auto h-[62svh] max-h-[560px] max-w-none md:max-w-full md:h-auto md:max-h-[82vh] md:w-[clamp(420px,65vw,1200px)] object-contain object-bottom select-none drop-shadow-[0_-12px_45px_rgba(232,129,74,0.32)]"
           />
         </motion.div>
       </motion.div>
-
-      {/* mobile readability fade */}
-      <div
-        aria-hidden
-        className="md:hidden absolute inset-x-0 bottom-0 z-[15] h-[55%] pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, #0a0a0a 18%, rgba(10,10,10,0.75) 55%, transparent 100%)",
-        }}
-      />
 
       {/* ── LEFT CONTENT ── */}
       <motion.div
         className="absolute z-20"
         style={{
-          bottom: "clamp(88px, 14vh, 160px)",
+          bottom: "clamp(44px, 8vh, 160px)",
           left: "clamp(20px, 4vw, 72px)",
           right: "clamp(20px, 4vw, 72px)",
           maxWidth: "min(clamp(300px, 36vw, 520px), calc(100vw - 40px))",
@@ -192,7 +181,13 @@ export default function HeroSection() {
           opacity: contentOpacity,
         }}
       >
-        <div className="flex flex-col gap-6">
+        {/* Soft borderless ambient backdrop blur — feathered edges, no box/border */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-3xl backdrop-blur-md bg-black/40 [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_95%)]"
+        />
+
+        <div className="relative flex flex-col gap-5 sm:gap-6">
           {/* Role */}
           <motion.div
             className="flex items-center gap-4"
@@ -241,6 +236,7 @@ export default function HeroSection() {
               fontWeight: 400,
               fontFamily: grotesk,
               letterSpacing: "-0.01em",
+              textShadow: "0 2px 16px rgba(0,0,0,0.85)",
             }}
           >
             let me show you my journey so far —{" "}
@@ -256,7 +252,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.8 }}
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: 0.96 }}
             style={{
               fontSize: "clamp(1rem, 1.4vw, 1.2rem)",
               fontWeight: 600,
@@ -267,13 +263,13 @@ export default function HeroSection() {
             }}
           >
             <span className="relative flex items-center">
-              <span className="block h-[1.5px] w-12 bg-[#f5f5f5]/85 transition-all duration-500 ease-out group-hover:w-20 group-hover:bg-[#e8814a]" />
+              <span className="block h-[1.5px] w-12 bg-[#f5f5f5]/85 transition-all duration-200 ease-out group-hover:w-20 group-hover:bg-[#e8814a]" />
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 14 14"
                 fill="none"
-                className="-ml-1 transition-all duration-500 ease-out group-hover:translate-x-1 group-hover:text-[#e8814a]"
+                className="-ml-1 transition-all duration-200 ease-out group-hover:translate-x-1 group-hover:text-[#e8814a]"
                 aria-hidden
               >
                 <path
@@ -285,16 +281,17 @@ export default function HeroSection() {
                 />
               </svg>
             </span>
-            <span className="transition-colors duration-300 group-hover:text-[#e8814a]">
+            <span className="transition-colors duration-200 group-hover:text-[#e8814a]">
               view my work
             </span>
           </motion.a>
         </div>
       </motion.div>
 
-      {/* ── TIHMO SIGNATURE (raised to match reference) ── */}
+
+      {/* ── TIHMO SIGNATURE (desktop only, hidden on mobile to prevent overlap) ── */}
       <motion.div
-        className="absolute z-20 pointer-events-none bottom-[47svh] md:bottom-[clamp(150px,27vh,300px)]"
+        className="hidden md:block absolute z-20 pointer-events-none md:bottom-[clamp(150px,27vh,300px)]"
         style={{
           right: "clamp(12px, 5vw, 110px)",
           y: sigY,
@@ -321,6 +318,21 @@ export default function HeroSection() {
       </motion.div>
 
       {/* ── SCROLL INDICATOR ── */}
+      <motion.div
+        aria-hidden
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.1 }}
+        className="absolute bottom-5 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 pointer-events-none z-20"
+      >
+        <div className="h-7 w-4.5 rounded-full border border-white/20 p-1 flex justify-center">
+          <motion.div
+            animate={reduce ? undefined : { y: [0, 8, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="h-1.5 w-1 rounded-full bg-[#e8814a]"
+          />
+        </div>
+      </motion.div>
 
     </section>
   );

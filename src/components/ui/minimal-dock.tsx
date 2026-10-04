@@ -37,8 +37,8 @@ export const DockItemComponent: React.FC<DockItemProps> = ({ item, isHovered, on
         transition-all duration-300 ease-out
         cursor-pointer
         shadow-none
-        ${isHovered 
-          ? 'scale-110 bg-white/10 border-white/20 -translate-y-1.5 shadow-xl shadow-white/10' 
+        ${isHovered
+          ? 'scale-110 bg-white/10 border-white/20 -translate-y-1.5 shadow-xl shadow-white/10'
           : 'hover:scale-105 hover:bg-white/7 hover:-translate-y-0.5'
         }
       `}
@@ -77,7 +77,7 @@ export const DockItemComponent: React.FC<DockItemProps> = ({ item, isHovered, on
       ) : (
         content
       )}
-      
+
       {/* Tooltip */}
       <div className={`
         absolute -top-10 left-1/2 transform -translate-x-1/2
@@ -88,8 +88,8 @@ export const DockItemComponent: React.FC<DockItemProps> = ({ item, isHovered, on
         transition-all duration-200
         pointer-events-none
         whitespace-nowrap
-        ${isHovered 
-          ? 'opacity-100 translate-y-0' 
+        ${isHovered
+          ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-1'
         }
         shadow-sm
@@ -140,7 +140,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
       />
 
       {/* Reflection Effect with smooth fade to transparent */}
-      <div 
+      <div
         className="absolute top-full left-0 right-0 mt-1 h-32 overflow-hidden pointer-events-none"
         style={{
           maskImage: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 95%)',
@@ -165,8 +165,8 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
                 w-14 h-14 rounded-2xl
                 bg-white/5
                 transition-all duration-300 ease-out
-                ${hoveredItem === item.id 
-                  ? 'scale-125 -translate-y-2' 
+                ${hoveredItem === item.id
+                  ? 'scale-125 -translate-y-2'
                   : ''
                 }
               `}

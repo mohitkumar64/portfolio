@@ -189,7 +189,7 @@ function RopeCard({
           ease: "easeInOut",
         }}
         whileHover={{ scale: 1.05 }}
-        className="relative rounded-xl px-3 py-2 md:rounded-2xl md:px-5 md:py-4 backdrop-blur-md"
+        className="relative rounded-xl px-2.5 py-1.5 md:rounded-2xl md:px-5 md:py-4 backdrop-blur-md"
         style={{
           background: "rgba(20,20,24,0.78)",
           border: "1px solid rgba(255,255,255,0.12)",
@@ -201,13 +201,13 @@ function RopeCard({
         <span className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border border-[#e8814a] bg-[#0a0a0a] shadow-[0_0_10px_#e8814a]" />
         <span className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border border-[#e8814a] bg-[#0a0a0a] shadow-[0_0_10px_#e8814a]" />
         <p
-          className="text-[9px] md:text-[11px] uppercase tracking-[0.2em] text-[#e8814a]"
+          className="text-[8px] md:text-[11px] uppercase tracking-[0.2em] text-[#e8814a]"
           style={{ fontFamily: grotesk }}
         >
           {label}
         </p>
         <div
-          className="mt-0.5 md:mt-1 max-w-[7.5rem] md:max-w-none text-[12px] leading-tight md:text-lg font-semibold text-white md:whitespace-nowrap"
+          className="mt-0.5 md:mt-1 max-w-[7.5rem] md:max-w-none text-[11px] leading-tight md:text-lg font-semibold text-white md:whitespace-nowrap"
           style={{ fontFamily: grotesk }}
         >
           {children}
@@ -225,7 +225,7 @@ const sentence: { w: string; accent?: boolean }[] = [
 ];
 
 const DESKTOP: Pt[] = [[14, 20], [86, 24], [15, 82], [85, 78]];
-const MOBILE: Pt[] = [[26, 9], [74, 12], [26, 91], [74, 88]];
+const MOBILE: Pt[] = [[26, 12], [74, 12], [26, 85], [74, 85]];
 
 export default function ParallaxSection() {
   const ref = useRef<HTMLElement>(null);
@@ -411,7 +411,7 @@ export default function ParallaxSection() {
 
           <motion.span
             style={{ opacity: kickerOpacity, fontFamily: grotesk }}
-            className="mb-7 text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] text-[#e8814a]"
+            className="mb-4 sm:mb-7 text-[11px] sm:text-sm font-semibold uppercase tracking-[0.35em] text-[#e8814a]"
           >
             The short story
           </motion.span>
@@ -420,8 +420,8 @@ export default function ParallaxSection() {
             style={{
               fontFamily: grotesk,
               fontWeight: 600,
-              fontSize: "clamp(1.9rem, 4.1vw, 3.6rem)",
-              lineHeight: 1.22,
+              fontSize: "clamp(1.2rem, 5.2vw, 3.6rem)",
+              lineHeight: 1.25,
               letterSpacing: "-0.02em",
               maxWidth: "min(88vw, 24em)",
               textWrap: "balance",
@@ -437,7 +437,7 @@ export default function ParallaxSection() {
             })}
           </h2>
 
-          <div className="mt-10 h-[2px] w-40 overflow-hidden rounded bg-white/10">
+          <div className="mt-6 sm:mt-10 h-[2px] w-28 sm:w-40 overflow-hidden rounded bg-white/10">
             <motion.div
               className="h-full w-full origin-left"
               style={{

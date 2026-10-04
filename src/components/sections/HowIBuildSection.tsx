@@ -19,6 +19,10 @@ import {
   ShieldCheck,
   Rocket,
   RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  ListFilter,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -193,6 +197,45 @@ export default function HowIBuildSection() {
   // Drag tracking refs
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
   const draggingNodeId = useRef<string | null>(null);
+  const canvasScrollRef = useRef<HTMLDivElement>(null);
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
+  const [viewMode, setViewMode] = useState<"horizontal" | "list">("horizontal");
+
+  const scrollToPhase = (index: number) => {
+    setActivePhaseIndex(index);
+    if (!canvasScrollRef.current) return;
+    const targetNode = nodes[index];
+    if (!targetNode) return;
+    const offset = Math.max(0, targetNode.basePos.x - 20);
+    canvasScrollRef.current.scrollTo({
+      left: offset,
+      behavior: "smooth",
+    });
+  };
+
+  const handlePrev = () => {
+    const prevIdx = Math.max(0, activePhaseIndex - 1);
+    scrollToPhase(prevIdx);
+  };
+
+  const handleNext = () => {
+    const nextIdx = Math.min(nodes.length - 1, activePhaseIndex + 1);
+    scrollToPhase(nextIdx);
+  };
+
+  const handleCanvasScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    let closestIndex = 0;
+    let minDiff = Infinity;
+    nodes.forEach((n, idx) => {
+      const diff = Math.abs(n.basePos.x - scrollLeft - 20);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = idx;
+      }
+    });
+    setActivePhaseIndex(closestIndex);
+  };
 
   // Parallax glow
   const { scrollYProgress } = useScroll({
@@ -218,23 +261,19 @@ export default function HowIBuildSection() {
     }
   };
 
-  // Handle Drag: generous ±100px vertical space (200px of vertical travel)
+  // Handle Drag: vertical freedom (horizontal swiping scrolls canvas smoothly)
   const handleDrag = (nodeId: string, { offset }: PanInfo) => {
     if (draggingNodeId.current !== nodeId || !dragStartPos.current) return;
     const node = nodes.find((n) => n.id === nodeId);
     if (!node) return;
 
-    const rawX = dragStartPos.current.x + offset.x;
     const rawY = dragStartPos.current.y + offset.y;
-
-    // Clamped strictly to bounds: ±25px horizontal (prevents crossing), ±100px vertical (generous breathing room)
-    const clampedX = Math.max(node.basePos.x - 25, Math.min(node.basePos.x + 25, rawX));
     const clampedY = Math.max(node.basePos.y - 100, Math.min(node.basePos.y + 100, rawY));
 
     flushSync(() => {
       setNodes((prev) =>
         prev.map((n) =>
-          n.id === nodeId ? { ...n, position: { x: clampedX, y: clampedY } } : n
+          n.id === nodeId ? { ...n, position: { x: n.basePos.x, y: clampedY } } : n
         )
       );
     });
@@ -405,7 +444,7 @@ export default function HowIBuildSection() {
             className="mt-6 flex flex-wrap items-center justify-between gap-4"
           >
             <p
-              className="max-w-2xl text-[14px] leading-relaxed text-neutral-400 sm:text-[16px]"
+              className="max-w-xl text-[14px] leading-relaxed text-neutral-400 sm:text-[16px]"
               style={{ fontFamily: grotesk }}
             >
               {isBroken ? (
@@ -413,33 +452,107 @@ export default function HowIBuildSection() {
                   You severed a pipeline wire! Click the button to reconnect the workflow.
                 </span>
               ) : (
-                "My structured engineering lifecycle — deconstructing problems, picking robust foundations, animating fluidly, and shipping. Click any cable to cut it."
+                "My structured engineering lifecycle — deconstructing problems, picking robust foundations, animating fluidly, and shipping."
               )}
             </p>
 
-            {isBroken && (
-              <button
-                type="button"
-                onClick={handleRepair}
-                className="group flex items-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-mono tracking-wider text-red-300 hover:bg-red-500/25 hover:text-white transition-all shadow-[0_0_20px_rgba(239,68,68,0.25)] cursor-pointer"
-                style={{ fontFamily: mono }}
-              >
-                <RotateCcw size={14} className="transition-transform group-hover:-rotate-90" />
-                <span>REPAIR PIPELINE ⚡</span>
-              </button>
-            )}
+            <div className="flex flex-wrap items-center gap-3">
+              {isBroken && (
+                <motion.button
+                  type="button"
+                  onClick={handleRepair}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  className="group flex items-center gap-2 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs font-mono tracking-wider text-red-300 hover:bg-red-500/25 hover:text-white transition-colors shadow-[0_0_20px_rgba(239,68,68,0.25)] cursor-pointer"
+                  style={{ fontFamily: mono }}
+                >
+                  <RotateCcw size={14} className="transition-transform group-hover:-rotate-90" />
+                  <span>REPAIR PIPELINE ⚡</span>
+                </motion.button>
+              )}
+
+              {/* View Mode Option (User can choose between Horizontal and Pipeline List) */}
+              <div className="flex items-center gap-1 rounded-xl bg-white/[0.04] p-1 border border-white/10 backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("horizontal")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-mono tracking-wider transition-all cursor-pointer ${
+                    viewMode === "horizontal"
+                      ? "bg-[#e8814a] text-black font-bold shadow-[0_0_12px_rgba(232,129,74,0.35)]"
+                      : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
+                  }`}
+                  style={{ fontFamily: mono }}
+                >
+                  <LayoutGrid size={13} />
+                  <span>HORIZONTAL</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("list")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-mono tracking-wider transition-all cursor-pointer ${
+                    viewMode === "list"
+                      ? "bg-[#e8814a] text-black font-bold shadow-[0_0_12px_rgba(232,129,74,0.35)]"
+                      : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
+                  }`}
+                  style={{ fontFamily: mono }}
+                >
+                  <ListFilter size={13} />
+                  <span>PIPELINE LIST</span>
+                </button>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
 
-        {/* ── EXPANDED CANVAS: 480px height for generous up/down dragging ── */}
-        <motion.div
-          variants={rise}
-          initial="hidden"
-          whileInView="show"
-          viewport={IN_VIEW}
-          className="mt-12 relative w-full overflow-x-auto overflow-y-hidden py-4 select-none scrollbar-none"
-          style={{ cursor: SCISSORS_CURSOR }}
-        >
+        {/* ── CONDITIONAL VIEW: HORIZONTAL CANVAS OR LIST PIPELINE ── */}
+        {viewMode === "horizontal" ? (
+          <div className="relative mt-6 sm:mt-12 w-full">
+            {/* Middle Left Arrow to move backward */}
+            <motion.button
+              type="button"
+              aria-label="Previous Phase"
+              onClick={handlePrev}
+              disabled={activePhaseIndex === 0}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className={`absolute -left-2 sm:-left-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer ${
+                activePhaseIndex === 0
+                  ? "opacity-20 pointer-events-none"
+                  : "hover:border-[#e8814a] hover:bg-black active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+              }`}
+            >
+              <ChevronLeft size={20} className="text-[#e8814a]" />
+            </motion.button>
+
+            {/* Middle Right Arrow to move forward */}
+            <motion.button
+              type="button"
+              aria-label="Next Phase"
+              onClick={handleNext}
+              disabled={activePhaseIndex === nodes.length - 1}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className={`absolute -right-2 sm:-right-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer ${
+                activePhaseIndex === nodes.length - 1
+                  ? "opacity-20 pointer-events-none"
+                  : "hover:border-[#e8814a] hover:bg-black active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.8)]"
+              }`}
+            >
+              <ChevronRight size={20} className="text-[#e8814a]" />
+            </motion.button>
+
+            {/* ── EXPANDED CANVAS: 480px height for generous up/down dragging ── */}
+            <motion.div
+              ref={canvasScrollRef}
+              onScroll={handleCanvasScroll}
+              variants={rise}
+              initial="hidden"
+              whileInView="show"
+              viewport={IN_VIEW}
+              className="relative w-full overflow-x-auto overflow-y-hidden py-4 select-none touch-pan-x scroll-smooth rounded-2xl border border-white/[0.06] bg-black/20"
+              style={{ cursor: SCISSORS_CURSOR }}
+            >
           {/* Centered Canvas Container with 480px height */}
           <div
             className="relative mx-auto"
@@ -519,7 +632,7 @@ export default function HowIBuildSection() {
               })}
             </svg>
 
-            {/* Nodes — ONLY Cards are draggable, with ±100px vertical freedom */}
+            {/* Nodes — ONLY Cards are draggable vertically, horizontal touch scrolls canvas */}
             {nodes.map((node, index) => {
               const Icon = node.icon;
               const colors = colorClasses[node.color];
@@ -527,11 +640,9 @@ export default function HowIBuildSection() {
               return (
                 <motion.div
                   key={node.id}
-                  drag
+                  drag="y"
                   dragMomentum={false}
                   dragConstraints={{
-                    left: node.basePos.x - 25,
-                    right: node.basePos.x + 25,
                     top: node.basePos.y - 100,
                     bottom: node.basePos.y + 100,
                   }}
@@ -622,6 +733,90 @@ export default function HowIBuildSection() {
             })}
           </div>
         </motion.div>
+
+        {/* Phase indicator beneath canvas */}
+        <div className="mt-3 flex items-center justify-between px-2 text-xs font-mono text-neutral-400">
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#e8814a] animate-pulse" />
+            <span className="text-[#e8814a] font-semibold">{nodes[activePhaseIndex]?.phase}</span>
+            <span className="text-neutral-300">— {nodes[activePhaseIndex]?.title}</span>
+          </span>
+          <span className="text-[11px] text-neutral-500">
+            Phase {activePhaseIndex + 1} of {nodes.length}
+          </span>
+        </div>
+      </div>
+    ) : (
+      /* ── VERTICAL PIPELINE LIST VIEW ── */
+      <div className="relative mt-8 sm:mt-12 flex flex-col gap-5 max-w-2xl mx-auto">
+        {/* Continuous vertical line behind cards */}
+        <div
+          className="absolute left-6 top-6 bottom-6 w-[2px] -translate-x-1/2 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, #10b981 0%, #3b82f6 25%, #f59e0b 50%, #a855f7 75%, #6366f1 100%)",
+            opacity: 0.45,
+          }}
+        />
+
+        {nodes.map((node, index) => {
+          const colors = colorClasses[node.color];
+          const Icon = node.icon;
+          return (
+            <motion.div
+              key={node.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="relative flex items-start gap-4 sm:gap-6 pl-1"
+            >
+              {/* Timeline node marker */}
+              <div className="relative z-10 flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-[#0d0d11] shadow-lg">
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-25 blur-sm"
+                  style={{ backgroundColor: colors.dot }}
+                />
+                <div
+                  className={`flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl border ${colors.border} ${colors.bg} ${colors.text}`}
+                >
+                  <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
+                </div>
+              </div>
+
+              {/* Card */}
+              <Card className={`group/card flex-1 overflow-hidden rounded-2xl border ${colors.border} bg-[#0d0d11]/90 p-5 backdrop-blur-xl transition-all duration-300 hover:border-white/20 shadow-md`}>
+                <div className="flex items-center justify-between gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-widest text-[#e8814a]"
+                  >
+                    {node.phase}
+                  </Badge>
+                  <span className="text-[11px] font-mono text-neutral-500">
+                    STEP 0{index + 1}
+                  </span>
+                </div>
+
+                <h3
+                  className="mt-2.5 text-base sm:text-lg font-bold text-white tracking-tight"
+                  style={{ fontFamily: grotesk }}
+                >
+                  {node.title}
+                </h3>
+
+                <p
+                  className="mt-1.5 text-xs sm:text-sm leading-relaxed text-neutral-400"
+                  style={{ fontFamily: grotesk }}
+                >
+                  {node.description}
+                </p>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
+    )}
       </div>
     </section>
   );

@@ -335,7 +335,7 @@ function SkillRadar({
             strokeWidth: 2.5,
             stroke: "var(--color-value)",
           }}
-          animationDuration={800}
+          animationDuration={300}
           animationEasing="ease-out"
         />
       </RadarChart>
@@ -363,45 +363,31 @@ function TechBadge({
 
   return (
     <motion.div
-      className="group/logo relative flex flex-col items-center gap-2.5"
-      initial={{ opacity: 0, y: reduce ? 0 : 20, scale: 0.85, filter: reduce ? "blur(0px)" : "blur(4px)" }}
-      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      className="group/logo relative flex flex-col items-center gap-2 cursor-pointer"
+      initial={{ opacity: 0, y: reduce ? 0 : 12, scale: 0.94 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.94 }}
       transition={{
-        duration: 0.55,
+        duration: 0.28,
         ease,
         delay,
-        scale: { type: "spring", stiffness: 260, damping: 20, delay },
       }}
-      whileHover={reduce ? undefined : { y: -6, scale: 1.08 }}
+      whileHover={reduce ? undefined : { y: -4, scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
     >
       {/* glow on hover */}
       <div
-        className="absolute -inset-4 -z-10 rounded-2xl opacity-0 transition-opacity duration-500 group-hover/logo:opacity-100"
+        className="pointer-events-none absolute -inset-3 -z-10 rounded-2xl opacity-0 transition-opacity duration-300 group-hover/logo:opacity-100"
         style={{
-          background: `radial-gradient(circle, ${color}18, transparent 70%)`,
+          background: `radial-gradient(circle, ${color}20, transparent 70%)`,
         }}
       />
 
       {/* logo box */}
       <div
-        className="flex h-[52px] w-[52px] items-center justify-center rounded-xl border transition-all duration-300"
+        className="flex h-[46px] w-[46px] sm:h-[52px] sm:w-[52px] items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] transition-colors duration-200 group-hover/logo:border-white/25 group-hover/logo:bg-white/[0.07]"
         style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        onMouseEnter={(e) => {
-          const el = e.currentTarget;
-          el.style.borderColor = `${color}55`;
-          el.style.background = `${color}12`;
-          el.style.boxShadow = `0 0 30px ${color}22, inset 0 1px 0 rgba(255,255,255,0.06)`;
-          el.style.transform = "scale(1.06)";
-        }}
-        onMouseLeave={(e) => {
-          const el = e.currentTarget;
-          el.style.borderColor = "rgba(255,255,255,0.08)";
-          el.style.background = "rgba(255,255,255,0.03)";
-          el.style.boxShadow = "none";
-          el.style.transform = "scale(1)";
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
         }}
       >
         {tech.slug && !failed ? (
@@ -414,12 +400,12 @@ function TechBadge({
             height={24}
             loading="lazy"
             onError={() => setFailed(true)}
-            className="opacity-60 transition-opacity duration-300 group-hover/logo:opacity-100"
+            className="opacity-60 transition-opacity duration-200 group-hover/logo:opacity-100"
             style={tech.dark ? { filter: "invert(1)" } : undefined}
           />
         ) : (
           <span
-            className="text-[11px] font-bold tracking-[0.06em] text-neutral-400 transition-colors group-hover/logo:text-neutral-200"
+            className="text-[11px] font-bold tracking-[0.06em] text-neutral-400 transition-colors duration-200 group-hover/logo:text-neutral-100"
             style={{ fontFamily: mono }}
           >
             {initials}
@@ -429,7 +415,7 @@ function TechBadge({
 
       {/* name */}
       <span
-        className="max-w-[76px] truncate text-center text-[10px] text-neutral-500 transition-colors duration-300 group-hover/logo:text-neutral-200"
+        className="max-w-[76px] truncate text-center text-[10px] text-neutral-500 transition-colors duration-200 group-hover/logo:text-neutral-200"
         style={{ fontFamily: mono }}
       >
         {tech.name}
@@ -442,7 +428,7 @@ function TechBadge({
           style={{ background: color }}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: tech.level / 100 }}
-          transition={{ duration: 0.9, ease, delay: delay + 0.15 }}
+          transition={{ duration: 0.5, ease, delay: delay + 0.08 }}
         />
       </div>
     </motion.div>
@@ -460,7 +446,7 @@ function CategoryBar({
   onSelect: (i: number) => void;
 }) {
   return (
-    <div className="relative -mx-2 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+    <div className="relative -mx-2 flex flex-wrap items-center justify-center gap-1.5 px-2 sm:gap-2">
       {categories.map((cat, i) => {
         const Icon = cat.icon;
         const on = i === active;
@@ -678,14 +664,12 @@ export default function SkillsSection() {
             viewport={IN_VIEW}
             transition={{ duration: 1, ease }}
           >
-            <div className="relative w-full max-w-[400px]">
+            <div className="relative w-full max-w-[360px] sm:max-w-[400px]">
               {/* slow-rotating dashed ring */}
               <motion.div
                 aria-hidden
-                className="absolute left-1/2 top-1/2 -z-10 rounded-full"
+                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 aspect-square w-[106%] max-w-[380px] rounded-full"
                 style={{
-                  width: "115%",
-                  height: "115%",
                   x: "-50%",
                   y: "-50%",
                   border: `1px dashed ${cat.color}28`,
@@ -700,34 +684,34 @@ export default function SkillsSection() {
               />
 
               {/* the radar chart */}
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="popLayout">
                 <motion.div
                   key={cat.id}
-                  initial={{ opacity: 0, scale: 0.88, rotate: reduce ? 0 : -6, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 0.88, rotate: reduce ? 0 : 6, filter: "blur(8px)" }}
-                  transition={{ duration: 0.6, ease }}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+                  transition={{ duration: 0.22, ease }}
                 >
                   <SkillRadar cat={cat} gradientId={`radar-${cat.id}`} />
                 </motion.div>
               </AnimatePresence>
 
               {/* center icon badge */}
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="popLayout">
                 <motion.div
                   key={cat.id}
                   className="pointer-events-none absolute left-1/2 top-1/2 flex flex-col items-center gap-1.5"
                   style={{ x: "-50%", y: "-50%" }}
-                  initial={{ opacity: 0, scale: 0.7 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.7 }}
-                  transition={{ duration: 0.4, ease }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.18, ease }}
                 >
                   {(() => {
                     const Icon = cat.icon;
                     return (
                       <span
-                        className="flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-500"
+                        className="flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-300"
                         style={{
                           borderColor: `${cat.color}35`,
                           background: `${cat.color}12`,
@@ -755,29 +739,27 @@ export default function SkillsSection() {
 
           {/* RIGHT: TECH GRID + BLURB */}
           <div className="min-w-0">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
               <motion.div
                 key={cat.id}
                 initial={{
                   opacity: 0,
-                  x: reduce ? 0 : 30,
-                  filter: "blur(8px)",
+                  y: reduce ? 0 : 10,
                 }}
-                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{
                   opacity: 0,
-                  x: reduce ? 0 : -20,
-                  filter: "blur(8px)",
+                  y: reduce ? 0 : -8,
                 }}
-                transition={{ duration: 0.55, ease }}
+                transition={{ duration: 0.22, ease }}
               >
                 {/* category header */}
-                <div className="mb-8 flex items-center gap-4">
+                <div className="mb-6 flex items-center gap-4 sm:mb-8">
                   {(() => {
                     const Icon = cat.icon;
                     return (
                       <span
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-500"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-300"
                         style={{
                           borderColor: `${cat.color}30`,
                           background: `${cat.color}10`,
@@ -807,15 +789,15 @@ export default function SkillsSection() {
                   </div>
                 </div>
 
-                {/* tech logo grid */}
-                <div className="grid grid-cols-4 gap-x-4 gap-y-6 sm:grid-cols-5 lg:grid-cols-5">
+                {/* tech logo grid — responsive for phones through desktop */}
+                <div className="grid grid-cols-3 gap-x-3 gap-y-5 min-[480px]:grid-cols-4 sm:grid-cols-5 lg:grid-cols-5 sm:gap-x-4 sm:gap-y-6">
                   {cat.tech.map((tech, i) => (
                     <TechBadge
                       key={`${cat.id}-${tech.name}`}
                       tech={tech}
                       color={cat.color}
                       reduce={reduce}
-                      delay={0.06 + i * 0.045}
+                      delay={0.02 + i * 0.025}
                     />
                   ))}
                 </div>

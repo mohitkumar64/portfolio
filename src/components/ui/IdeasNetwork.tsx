@@ -170,7 +170,7 @@ export default function IdeasNetwork() {
                     stroke: active ? "rgba(232,129,74,0.9)" : "rgba(255,255,255,0.22)",
                     strokeWidth: active ? 0.35 : 0.2,
                   }}
-                  initial={{ pathLength: 0 }}
+                  initial={{ pathLength: 0, strokeWidth: 0.2 }}
                   whileInView={{ pathLength: 1 }}
                   viewport={IN_VIEW}
                   transition={{

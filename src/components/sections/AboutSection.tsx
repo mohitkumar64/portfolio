@@ -57,7 +57,7 @@ const headingBase = {
 const stats = [
   { icon: MapPin, k: "Based in", v: "India", s: "" },
   { icon: GraduationCap, k: "Education", v: "Computer Science", s: "B.Tech (CSE)" },
-  { icon: Layers, k: "Focus areas", v: "Full Stack / AI / Systems", s: "Building • Learning • Improving" },
+  { icon: Layers, k: "Focus areas", v: "Full Stack / AI/ML / System Design", s: "Building • Learning • Improving" },
 ];
 
 export default function AboutSection() {
@@ -209,17 +209,18 @@ export default function AboutSection() {
               <motion.a
                 variants={rise}
                 href="#projects"
+                whileTap={{ scale: 0.96 }}
                 className="group mt-10 inline-flex items-center gap-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a] rounded-full"
               >
-                <span className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[#e8814a]/60 text-[#e8814a] transition-colors duration-500 group-hover:text-black">
-                  <span className="absolute inset-0 origin-bottom scale-y-0 rounded-full bg-[#e8814a] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100" />
+                <span className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-[#e8814a]/60 text-[#e8814a] transition-colors duration-250 group-hover:text-black">
+                  <span className="absolute inset-0 origin-bottom scale-y-0 rounded-full bg-[#e8814a] transition-transform duration-250 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-y-100" />
                   <ArrowRight
                     size={18}
-                    className="relative transition-transform duration-500 group-hover:translate-x-0.5"
+                    className="relative transition-transform duration-250 group-hover:translate-x-0.5"
                   />
                 </span>
                 <span
-                  className="text-xs tracking-[0.22em] text-neutral-200 transition-colors group-hover:text-white"
+                  className="text-xs tracking-[0.22em] text-neutral-200 transition-colors duration-200 group-hover:text-white"
                   style={{ fontFamily: mono }}
                 >
                   MORE ABOUT ME
@@ -280,10 +281,12 @@ export default function AboutSection() {
             <motion.div
               key={k}
               variants={rise}
-              className={`flex items-start gap-4 py-3 sm:px-8 ${i === 0 ? "sm:pl-0" : "sm:border-l sm:border-white/10"
+              whileHover={{ y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className={`group/stat flex items-start gap-4 py-3 sm:px-8 cursor-default ${i === 0 ? "sm:pl-0" : "sm:border-l sm:border-white/10"
                 }`}
             >
-              <Icon size={22} strokeWidth={1.4} className="mt-1 text-neutral-400" />
+              <Icon size={22} strokeWidth={1.4} className="mt-1 text-neutral-400 transition-colors duration-200 group-hover/stat:text-[#e8814a]" />
               <div>
                 <div
                   className="text-[10px] tracking-[0.2em] text-neutral-500"

@@ -89,7 +89,8 @@ function TopNav() {
           boxShadow: scrolled
             ? "0 10px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)"
             : "none",
-          transition: "all .6s cubic-bezier(.22,1,.36,1)",
+          transition:
+            "width .5s cubic-bezier(.22,1,.36,1), height .5s cubic-bezier(.22,1,.36,1), padding .5s cubic-bezier(.22,1,.36,1), background .4s ease, border-color .4s ease, box-shadow .4s ease",
           position: "relative",
           overflow: "hidden",
         }}
@@ -112,6 +113,7 @@ function TopNav() {
           <ul className="flex items-center" style={{ gap: 2 }}>
             {navItems.map((item, idx) => {
               const isActive = active === idx;
+              const Icon = item.icon;
               return (
                 <li key={item.label} className="relative">
                   {shown === idx && (
@@ -136,7 +138,7 @@ function TopNav() {
                     onBlur={() => setHovered(null)}
                     className="relative flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a]"
                     style={{
-                      padding: "9px 18px",
+                      padding: "9px 16px",
                       fontSize: "clamp(0.8rem, 1.05vw, 0.92rem)",
                       fontWeight: isActive ? 600 : 500,
                       letterSpacing: "0.03em",
@@ -149,7 +151,13 @@ function TopNav() {
                       textDecoration: "none",
                     }}
                   >
-                    {item.label}
+                    <Icon
+                      size={15}
+                      strokeWidth={isActive ? 2.2 : 1.7}
+                      aria-hidden
+                      className="shrink-0"
+                    />
+                    <span>{item.label}</span>
                     {item.accent && (
                       <span
                         className="relative flex"
@@ -252,7 +260,8 @@ function BottomPillNav() {
                     : "1px solid rgba(255,255,255,0.07)"
                   : "1px solid transparent",
                 minWidth: 40,
-                transition: "all .3s cubic-bezier(.22,1,.36,1)",
+                transition:
+                  "background .25s ease, border-color .25s ease, color .25s ease, padding .25s cubic-bezier(.22,1,.36,1)",
               }}
               onClick={() => setActive(idx)}
               whileTap={{ scale: 0.93 }}

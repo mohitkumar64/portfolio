@@ -264,13 +264,13 @@ export default function BlobChatAssistant() {
         }}
         className="flex min-h-[64px] items-end justify-center pb-2"
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={speech}
-            initial={{ opacity: 0, scale: 0.88, y: 10 }}
+            initial={{ opacity: 0, scale: 0.94, y: 6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.88, y: -6 }}
-            transition={{ type: "spring", stiffness: 380, damping: 26 }}
+            exit={{ opacity: 0, scale: 0.94, y: -4 }}
+            transition={{ type: "spring", stiffness: 420, damping: 25 }}
             className="relative max-w-[340px] rounded-2xl border border-white/[0.12] bg-[#141419]/90 px-4 py-2.5 text-center shadow-[0_12px_30px_rgba(0,0,0,0.55)] backdrop-blur-md"
           >
             <p className="text-[13px] font-mono leading-snug tracking-wide text-neutral-100">
@@ -295,7 +295,9 @@ export default function BlobChatAssistant() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="blob-amber-theme relative my-2 flex h-48 w-48 sm:h-56 sm:w-56 items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.94 }}
+        className="blob-amber-theme relative my-2 flex h-48 w-48 sm:h-56 sm:w-56 items-center justify-center cursor-pointer select-none"
         onClick={handlePoke}
         title="Click to poke the blob!"
       >
@@ -347,16 +349,17 @@ export default function BlobChatAssistant() {
             value={input}
             onChange={handleInputChange}
             placeholder="ask blob anything... (e.g. who are you)"
-            className="w-full rounded-full border border-white/15 bg-white/[0.04] pl-4 pr-11 py-2.5 text-[12px] font-mono text-neutral-100 placeholder:text-neutral-500 focus:border-[#e8814a] focus:bg-[#e8814a]/5 focus:outline-none transition-all shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+            className="w-full rounded-full border border-white/15 bg-white/[0.04] pl-4 pr-11 py-2.5 text-[12px] font-mono text-neutral-100 placeholder:text-neutral-500 focus:border-[#e8814a] focus:bg-[#e8814a]/5 focus:outline-none transition-colors shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
           />
-          <button
+          <motion.button
             type="submit"
             disabled={!input.trim()}
-            className="absolute right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-[#e8814a] text-neutral-950 font-bold transition-all hover:bg-[#ff965d] active:scale-90 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_rgba(232,129,74,0.4)]"
+            whileTap={{ scale: 0.9 }}
+            className="absolute right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-[#e8814a] text-neutral-950 font-bold transition-colors hover:bg-[#ff965d] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_10px_rgba(232,129,74,0.4)]"
             aria-label="Send question to blob"
           >
             <Send size={12} />
-          </button>
+          </motion.button>
         </div>
       </form>
     </div>

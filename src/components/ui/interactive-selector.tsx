@@ -173,7 +173,11 @@ export default function InteractiveSelector({
                   : { type: "spring", stiffness: 170, damping: 22, mass: 0.9 }
               }
               onClick={() => select(i)}
-              onPointerEnter={() => select(i)}
+              onPointerEnter={() => {
+                if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+                  select(i);
+                }
+              }}
               onFocus={() => select(i)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -219,19 +223,19 @@ export default function InteractiveSelector({
 
               {/* index number */}
               <span
-                className="absolute left-3 top-3 z-10 rounded-md border border-white/10 bg-black/50 px-2 py-1 text-[9px] tracking-[0.18em] text-neutral-300 backdrop-blur-md sm:left-4 sm:top-4 sm:text-[10px]"
+                className={`absolute left-2.5 top-2.5 z-10 rounded-md border border-white/10 bg-black/50 px-1.5 py-0.5 text-[8px] tracking-[0.14em] text-neutral-300 backdrop-blur-md sm:left-4 sm:top-4 sm:px-2 sm:py-1 sm:text-[10px] ${
+                  isActive ? "block" : "hidden sm:block"
+                }`}
                 style={{ fontFamily: mono }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              {/* icon badge */}
+              {/* icon badge — responsive for small mobile viewports */}
               <motion.div
                 aria-hidden
-                className="absolute right-3 top-3 z-10 flex items-center justify-center rounded-full border backdrop-blur-md sm:right-4 sm:top-4"
+                className="absolute right-2 top-2 z-10 flex h-7 w-7 items-center justify-center rounded-full border backdrop-blur-md sm:right-4 sm:top-4 sm:h-[38px] sm:w-[38px]"
                 style={{
-                  width: 38,
-                  height: 38,
                   borderColor: isActive
                     ? "rgba(232,129,74,0.7)"
                     : "rgba(255,255,255,0.18)",
@@ -244,11 +248,18 @@ export default function InteractiveSelector({
                 transition={{ type: "spring", stiffness: 320, damping: 14 }}
               >
                 <Icon
+                  size={15}
+                  strokeWidth={1.6}
+                  className={`transition-colors sm:hidden ${
+                    isActive ? "text-[#e8814a]" : "text-neutral-300"
+                  }`}
+                />
+                <Icon
                   size={17}
                   strokeWidth={1.6}
-                  className={
+                  className={`hidden transition-colors sm:block ${
                     isActive ? "text-[#e8814a]" : "text-neutral-300"
-                  }
+                  }`}
                 />
               </motion.div>
 
@@ -302,15 +313,15 @@ export default function InteractiveSelector({
             initial={
               reduce
                 ? { opacity: 0 }
-                : { opacity: 0, y: 18, filter: "blur(6px)" }
+                : { opacity: 0, y: 10 }
             }
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            animate={{ opacity: 1, y: 0 }}
             exit={
               reduce
                 ? { opacity: 0 }
-                : { opacity: 0, y: -14, filter: "blur(6px)" }
+                : { opacity: 0, y: -8 }
             }
-            transition={{ duration: 0.4, ease }}
+            transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
             className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-5 sm:p-6"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-8">

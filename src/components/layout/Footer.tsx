@@ -112,6 +112,9 @@ export default function Footer() {
   };
 
   const handleWatermarkMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) {
+      return;
+    }
     if (!watermarkRef.current) return;
     const rect = watermarkRef.current.getBoundingClientRect();
     setWatermarkHover({
@@ -160,10 +163,13 @@ export default function Footer() {
 
             {/* Interactive System Status Button / Pill */}
             <div className="mt-6">
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setDiagnosticsOpen(!diagnosticsOpen)}
-                className="group flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur-md transition-all hover:border-[#e8814a]/50 hover:bg-[#e8814a]/10 cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 24 }}
+                className="group flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur-md transition-colors hover:border-[#e8814a]/50 hover:bg-[#e8814a]/10 cursor-pointer"
                 title="Click to toggle system diagnostics"
               >
                 <span className="relative flex h-2 w-2">
@@ -180,16 +186,16 @@ export default function Footer() {
                   size={12}
                   className="text-neutral-500 transition-transform group-hover:scale-110 group-hover:text-[#e8814a]"
                 />
-              </button>
+              </motion.button>
 
               {/* Interactive Diagnostics Popover Drawer */}
               <AnimatePresence>
                 {diagnosticsOpen && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0, y: -6 }}
+                    initial={{ opacity: 0, height: 0, y: -4 }}
                     animate={{ opacity: 1, height: "auto", y: 0 }}
-                    exit={{ opacity: 0, height: 0, y: -6 }}
-                    transition={{ duration: 0.25 }}
+                    exit={{ opacity: 0, height: 0, y: -4 }}
+                    transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
                     className="mt-3 max-w-sm overflow-hidden rounded-2xl border border-white/10 bg-[#0e0e12]/95 p-4 text-[11px] font-mono backdrop-blur-xl shadow-2xl"
                   >
                     <div className="flex items-center justify-between border-b border-white/[0.08] pb-2 text-[#e8814a]">
@@ -411,9 +417,10 @@ export default function Footer() {
           <AnimatePresence>
             {watermarkCelebrated && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                initial={{ opacity: 0, scale: 0.94, y: 6 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: -10 }}
+                exit={{ opacity: 0, scale: 0.94, y: -6 }}
+                transition={{ type: "spring", stiffness: 380, damping: 22 }}
                 className="absolute inset-0 flex items-center justify-center pointer-events-none"
               >
                 <div className="rounded-full border border-[#e8814a]/40 bg-[#161414]/95 px-5 py-2 font-mono text-[13px] text-[#ffd3ba] shadow-2xl backdrop-blur-md flex items-center gap-2">
@@ -439,8 +446,11 @@ export default function Footer() {
             className="flex flex-wrap items-center gap-3 text-[11px] text-neutral-400"
             style={{ fontFamily: mono }}
           >
-            <div
-              className="group relative flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 transition-all hover:border-[#e8814a]/40 hover:bg-[#e8814a]/10 cursor-pointer"
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="group relative flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 transition-colors hover:border-[#e8814a]/40 hover:bg-[#e8814a]/10 cursor-pointer"
               title="Roorkee, Uttarakhand, India"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -448,14 +458,16 @@ export default function Footer() {
                 ROORKEE, UTTARAKHAND, IN
               </span>
               <span className="text-neutral-500">🏔️</span>
-            </div>
+            </motion.div>
 
             <span>•</span>
 
             {/* Clickable coordinates to copy */}
-            <button
+            <motion.button
               type="button"
               onClick={handleCopyCoords}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
               className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-[#e8814a] transition-colors cursor-pointer"
               title="Click to copy coordinates"
             >
@@ -466,7 +478,7 @@ export default function Footer() {
               ) : (
                 <Copy size={11} className="text-neutral-500 group-hover:text-[#e8814a]" />
               )}
-            </button>
+            </motion.button>
 
             <span>•</span>
 
