@@ -46,7 +46,7 @@ function HeroName() {
             ...(outline
               ? {
                 WebkitTextStroke: "1.5px rgba(245,245,245,0.85)",
-                color: "transparent",
+                color: "rgba(18, 15, 15, 1)",
               }
               : { color: "#f5f5f5" }),
           }}
@@ -117,7 +117,7 @@ export default function HeroSection() {
 
       {/* ── NAME (behind boy) ── */}
       <motion.div
-        className="absolute inset-x-0 z-0 pointer-events-none select-none top-[20%] md:top-[35%]"
+        className="absolute inset-x-0 z-0 pointer-events-none select-none top-[25%] md:top-[35%]"
         style={{
           y: nameY,
           scale: nameScale,
@@ -184,7 +184,7 @@ export default function HeroSection() {
         {/* Soft borderless ambient backdrop blur — feathered edges, no box/border */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-3xl backdrop-blur-md md:backdrop-blur-nonebg-black/40 [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_95%)]"
+          className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-3xl  [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_95%)]"
         />
 
         <div className="relative flex flex-col gap-5 sm:gap-6">
