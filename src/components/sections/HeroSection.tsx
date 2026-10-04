@@ -184,7 +184,7 @@ export default function HeroSection() {
         {/* Soft borderless ambient backdrop blur — feathered edges, no box/border */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-3xl backdrop-blur-md bg-black/40 [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_95%)]"
+          className="pointer-events-none absolute -inset-4 sm:-inset-8 rounded-3xl backdrop-blur-md md:backdrop-blur-nonebg-black/40 [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_95%)]"
         />
 
         <div className="relative flex flex-col gap-5 sm:gap-6">
