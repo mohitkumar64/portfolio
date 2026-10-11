@@ -17,6 +17,8 @@ const IN_VIEW = { once: true, margin: "0px 0px 15% 0px" } as const;
 type NodeDef = {
   id: string;
   label: string;
+  href: string;
+  skillLabel: string;
   x: number;
   y: number;
   side: "left" | "right";
@@ -26,13 +28,13 @@ type NodeDef = {
 const CENTER = { x: 50, y: 50 };
 
 const nodes: NodeDef[] = [
-  { id: "ai", label: "AI / ML", x: 50, y: 9, side: "right", bend: 10 },
-  { id: "fe", label: "FRONTEND", x: 17, y: 27, side: "left", bend: -9 },
-  { id: "db", label: "DATABASES", x: 86, y: 33, side: "right", bend: 9 },
-  { id: "be", label: "BACKEND", x: 12, y: 60, side: "left", bend: 8 },
-  { id: "do", label: "DEVOPS", x: 92, y: 66, side: "right", bend: -9 },
-  { id: "sd", label: "SYSTEM DESIGN", x: 22, y: 88, side: "left", bend: -10 },
-  { id: "rt", label: "REAL TIME", x: 80, y: 91, side: "right", bend: 10 },
+  { id: "ai", label: "AI / ML", href: "#skill-aiml", skillLabel: "AI/ML", x: 50, y: 9, side: "right", bend: 10 },
+  { id: "fe", label: "FRONTEND", href: "#skill-frontend", skillLabel: "Frontend", x: 17, y: 27, side: "left", bend: -9 },
+  { id: "db", label: "DATABASES", href: "#skill-databases", skillLabel: "Databases", x: 86, y: 33, side: "right", bend: 9 },
+  { id: "be", label: "BACKEND", href: "#skill-backend", skillLabel: "Backend", x: 12, y: 60, side: "left", bend: 8 },
+  { id: "do", label: "DEVOPS", href: "#skill-devops", skillLabel: "DevOps", x: 92, y: 66, side: "right", bend: -9 },
+  { id: "sd", label: "SYSTEM DESIGN", href: "#skill-backend", skillLabel: "Backend", x: 22, y: 88, side: "left", bend: -10 },
+  { id: "rt", label: "REAL TIME", href: "#skill-realtime", skillLabel: "Realtime", x: 80, y: 91, side: "right", bend: 10 },
 ];
 
 const links: [string, string][] = [
@@ -115,7 +117,7 @@ export default function IdeasNetwork() {
       className="relative mx-auto aspect-square w-full max-w-[680px] px-0"
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      role="img"
+      role="group"
       aria-label="Network diagram: ideas at the center connected to frontend, backend, AI/ML, databases, DevOps, system design and real-time systems"
     >
       {/* BACK layer: orbits, particles, links */}
@@ -289,9 +291,11 @@ export default function IdeasNetwork() {
         {nodes.map((n, i) => {
           const active = hover === n.id;
           return (
-            <motion.div
+            <motion.a
               key={n.id}
-              className="absolute"
+              href={n.href}
+              aria-label={`View ${n.skillLabel} skills`}
+              className="absolute z-10 isolate before:absolute before:-inset-4 before:rounded-full before:content-[''] focus-visible:outline-none focus-visible:before:ring-2 focus-visible:before:ring-[#e8814a] focus-visible:before:ring-offset-2 focus-visible:before:ring-offset-[#0e0e12]"
               style={{ left: `${n.x}%`, top: `${n.y}%`, x: "-50%", y: "-50%" }}
               initial={{ opacity: 0, scale: 0, rotate: -90 }}
               whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -313,6 +317,8 @@ export default function IdeasNetwork() {
               }}
               onPointerEnter={() => setHover(n.id)}
               onPointerLeave={() => setHover(null)}
+              onFocus={() => setHover(n.id)}
+              onBlur={() => setHover(null)}
             >
               <motion.div
                 animate={reduce ? undefined : { y: [0, -5, 0] }}
@@ -377,7 +383,7 @@ export default function IdeasNetwork() {
                   </motion.span>
                 </span>
               </motion.div>
-            </motion.div>
+            </motion.a>
           );
         })}
       </motion.div>

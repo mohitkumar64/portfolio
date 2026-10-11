@@ -516,7 +516,7 @@ export default function HowIBuildSection() {
               disabled={activePhaseIndex === 0}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className={`absolute -left-2 sm:-left-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer ${
+              className={`absolute -left-2 sm:-left-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer lg:hidden ${
                 activePhaseIndex === 0
                   ? "opacity-20 pointer-events-none"
                   : "hover:border-[#e8814a] hover:bg-black active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.8)]"
@@ -533,7 +533,7 @@ export default function HowIBuildSection() {
               disabled={activePhaseIndex === nodes.length - 1}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className={`absolute -right-2 sm:-right-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer ${
+              className={`absolute -right-2 sm:-right-5 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-neutral-900/90 backdrop-blur-md text-white shadow-2xl transition-all cursor-pointer lg:hidden ${
                 activePhaseIndex === nodes.length - 1
                   ? "opacity-20 pointer-events-none"
                   : "hover:border-[#e8814a] hover:bg-black active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.8)]"

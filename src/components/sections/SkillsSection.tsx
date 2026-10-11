@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import {
   AnimatePresence,
   motion,
@@ -454,9 +454,10 @@ function CategoryBar({
           <motion.button
             key={cat.id}
             type="button"
+            id={`skill-${cat.id}`}
             onClick={() => onSelect(i)}
             aria-pressed={on}
-            className="relative flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2.5 outline-none transition-all duration-300 sm:px-4"
+            className="relative flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2.5 outline-none scroll-mt-[110px] transition-all duration-300 focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a] sm:px-4"
             style={{
               borderColor: on ? `${cat.color}50` : "rgba(255,255,255,0.07)",
               background: on ? `${cat.color}14` : "rgba(255,255,255,0.02)",
@@ -510,6 +511,79 @@ export default function SkillsSection() {
   const reduce = !!useReducedMotion();
   const ref = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    let disposed = false;
+
+    const categoryIndexForHash = (hash: string): number | null => {
+      if (!hash || hash === "#") return null;
+
+      let id: string;
+      try {
+        id = decodeURIComponent(hash.slice(1));
+      } catch {
+        return null;
+      }
+
+      const index = categories.findIndex((category) => `skill-${category.id}` === id);
+      return index === -1 ? null : index;
+    };
+
+    const selectFromHash = () => {
+      if (disposed) return;
+      const index = categoryIndexForHash(window.location.hash);
+      if (index !== null) setActive(index);
+    };
+
+    const onAnchorClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) return;
+
+      const link = event.target instanceof Element
+        ? event.target.closest<HTMLAnchorElement>("a[href]")
+        : null;
+      if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+
+      const href = link.getAttribute("href");
+      if (!href) return;
+
+      let url: URL;
+      try {
+        url = new URL(href, document.baseURI);
+      } catch {
+        return;
+      }
+
+      if (
+        url.origin !== window.location.origin ||
+        url.pathname !== window.location.pathname ||
+        url.search !== window.location.search
+      ) return;
+
+      const index = categoryIndexForHash(url.hash);
+      if (index !== null && document.getElementById(`skill-${categories[index].id}`)) {
+        setActive(index);
+      }
+    };
+
+    document.addEventListener("click", onAnchorClick, true);
+    window.addEventListener("hashchange", selectFromHash);
+    window.addEventListener("popstate", selectFromHash);
+    queueMicrotask(selectFromHash);
+
+    return () => {
+      disposed = true;
+      document.removeEventListener("click", onAnchorClick, true);
+      window.removeEventListener("hashchange", selectFromHash);
+      window.removeEventListener("popstate", selectFromHash);
+    };
+  }, []);
 
   const cat = categories[active];
 
