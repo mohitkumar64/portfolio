@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import {
   motion,
+  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -61,6 +62,7 @@ const stats = [
 ];
 
 export default function AboutSection() {
+  const reduce = !!useReducedMotion();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -128,7 +130,7 @@ export default function AboutSection() {
                   className="text-[11px] tracking-[0.22em] text-neutral-400"
                   style={{ fontFamily: mono }}
                 >
-                  02 / ABOUT ME
+                   01 / ABOUT ME
                 </span>
               </motion.div>
 
@@ -162,7 +164,7 @@ export default function AboutSection() {
                       color: "transparent",
                       backgroundSize: "220% 100%",
                     }}
-                    animate={{ backgroundPosition: ["0% 0%", "100% 0%"] }}
+                     animate={reduce ? undefined : { backgroundPosition: ["0% 0%", "100% 0%"] }}
                     transition={{
                       duration: 4.5,
                       ease: "easeInOut",

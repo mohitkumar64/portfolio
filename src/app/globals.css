@@ -99,6 +99,12 @@ body::before {
   z-index: 0;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping {
+    animation: none;
+  }
+}
+
 /* ─── Feral Blob Amber Theme Tokens ──────────────────────────── */
 .blob-amber-theme {
   --jelly-body-top: #ffeedd;
@@ -123,4 +129,3 @@ body::before {
   --jelly-shadow: rgba(232, 129, 74, 0.45);
   --jelly-shadow-light: rgba(232, 129, 74, 0.2);
 }
-

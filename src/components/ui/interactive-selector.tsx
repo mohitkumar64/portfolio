@@ -130,6 +130,7 @@ export default function InteractiveSelector({
 }) {
   const reduce = !!useReducedMotion();
   const [active, setActive] = useState(0);
+  const activeProject = projects[active];
 
   const select = useCallback((i: number) => setActive(i), []);
 
@@ -153,8 +154,9 @@ export default function InteractiveSelector({
               role="button"
               tabIndex={0}
               aria-expanded={isActive}
+              aria-pressed={isActive}
               aria-label={`${p.title} — ${p.tagline}`}
-              className="group relative min-w-0 cursor-pointer overflow-hidden rounded-xl outline-none"
+              className="group relative min-w-0 cursor-pointer overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#060608]"
               style={{
                 border: `1px solid ${isActive ? "rgba(232,129,74,0.65)" : "rgba(255,255,255,0.08)"
                   }`,
@@ -183,6 +185,14 @@ export default function InteractiveSelector({
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   select(i);
+                }
+                if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  select((i + 1) % projects.length);
+                }
+                if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                  e.preventDefault();
+                  select((i - 1 + projects.length) % projects.length);
                 }
               }}
             >
@@ -305,8 +315,15 @@ export default function InteractiveSelector({
         })}
       </motion.div>
 
+      <div className="mt-3 flex items-center justify-between gap-3 text-[9px] tracking-[0.18em] text-neutral-500 sm:hidden" style={{ fontFamily: mono }}>
+        <span>TAP A PANEL TO EXPLORE</span>
+        <span aria-live="polite" className="text-[#e8814a]">
+          {String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+        </span>
+      </div>
+
       {/* ── INFO UNDER THE IMAGES (changes with the active panel) ── */}
-      <div className="relative mt-5 min-h-[128px] sm:mt-6 sm:min-h-[132px]">
+      <div className="relative mt-5 min-h-[250px] sm:mt-6 sm:min-h-[194px]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}
@@ -327,18 +344,28 @@ export default function InteractiveSelector({
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-8">
               {/* description */}
               <div className="min-w-0 flex-1">
-                <div
+                 <div
                   className="text-[10px] tracking-[0.24em] text-[#e8814a]"
                   style={{ fontFamily: mono }}
                 >
-                  {projects[active].tagline.toUpperCase()}
+                  {activeProject.tagline.toUpperCase()}
                 </div>
-                <p
-                  className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-[15px]"
-                  style={{ fontFamily: mono }}
-                >
-                  {projects[active].description}
-                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-3 sm:gap-4">
+                  <div>
+                    <div className="text-[9px] tracking-[0.2em] text-neutral-500" style={{ fontFamily: mono }}>PROBLEM / FOCUS</div>
+                    <p className="mt-1.5 text-xs leading-relaxed text-neutral-300" style={{ fontFamily: mono }}>{activeProject.tagline}</p>
+                  </div>
+                  <div>
+                    <div className="text-[9px] tracking-[0.2em] text-neutral-500" style={{ fontFamily: mono }}>APPROACH</div>
+                    <p className="mt-1.5 text-xs leading-relaxed text-neutral-300" style={{ fontFamily: mono }}>{activeProject.description}</p>
+                  </div>
+                  <div>
+                    <div className="text-[9px] tracking-[0.2em] text-neutral-500" style={{ fontFamily: mono }}>RESULT / EVIDENCE</div>
+                    <p className="mt-1.5 text-xs leading-relaxed text-neutral-300" style={{ fontFamily: mono }}>
+                      {activeProject.tech.join(" · ")}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* tech stack chips */}
@@ -350,7 +377,7 @@ export default function InteractiveSelector({
                   TECH STACK
                 </div>
                 <div className="mt-2.5 flex flex-wrap gap-1.5">
-                  {projects[active].tech.map((t, ti) => (
+                   {activeProject.tech.map((t, ti) => (
                     <motion.span
                       key={`${active}-${t}`}
                       initial={
@@ -369,9 +396,11 @@ export default function InteractiveSelector({
                     </motion.span>
                   ))}
                 </div>
-                {projects[active].link && (
+                {activeProject.link && (
                   <motion.a
-                    href={projects[active].link}
+                    href={activeProject.link}
+                    target="_blank"
+                    rel="noreferrer"
                     initial={reduce ? undefined : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.4, delay: 0.2 }}

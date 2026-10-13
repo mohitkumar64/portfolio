@@ -5,6 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { JellyBlobMascot, type JellyBlobMood } from "feral-blob";
 import { Send } from "lucide-react";
 
+const quickQuestions = [
+  "who is mohit?",
+  "what are the projects?",
+  "what is the tech stack?",
+  "how can i contact mohit?",
+];
+
 export default function BlobChatAssistant() {
   const [mounted, setMounted] = useState(false);
   const [input, setInput] = useState("");
@@ -20,7 +27,8 @@ export default function BlobChatAssistant() {
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    setMounted(true);
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Autonomous idle behavior: gentle glances and natural blinks
@@ -189,9 +197,9 @@ export default function BlobChatAssistant() {
     };
   };
 
-  const handleSubmit = () => {
+  const answerQuestion = (rawQuery: string) => {
     // Convert to lowercase and trim
-    const clean = input.trim().toLowerCase();
+    const clean = rawQuery.trim().toLowerCase();
     if (!clean) return;
 
     setIsTyping(false);
@@ -210,6 +218,8 @@ export default function BlobChatAssistant() {
       }
     }, 350);
   };
+
+  const handleSubmit = () => answerQuestion(input);
 
   const handlePoke = () => {
     const nextCount = pokeCount + 1;
@@ -362,6 +372,25 @@ export default function BlobChatAssistant() {
           </motion.button>
         </div>
       </form>
+
+      <div className="mt-3 flex w-full max-w-[340px] flex-wrap justify-center gap-1.5" aria-label="Suggested questions">
+        {quickQuestions.map((question) => (
+          <button
+            key={question}
+            type="button"
+            onClick={() => answerQuestion(question)}
+            className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1.5 text-[10px] font-mono tracking-wide text-neutral-400 transition-colors hover:border-[#e8814a]/60 hover:bg-[#e8814a]/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8814a]"
+          >
+            {question}
+          </button>
+        ))}
+      </div>
+
+      <nav className="mt-3 flex items-center gap-3 text-[9px] font-mono tracking-[0.16em] text-neutral-500" aria-label="Portfolio shortcuts">
+        <a className="transition-colors hover:text-[#e8814a]" href="#projects">VIEW PROJECTS ↗</a>
+        <span aria-hidden>•</span>
+        <a className="transition-colors hover:text-[#e8814a]" href="#connect">CONNECT ↗</a>
+      </nav>
     </div>
   );
 }

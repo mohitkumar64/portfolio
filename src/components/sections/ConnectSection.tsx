@@ -9,7 +9,7 @@ import {
   useTransform,
   type Variants,
 } from "framer-motion";
-import { Mail, Copy, Check } from "lucide-react";
+import { Mail, Copy, Check, Download } from "lucide-react";
 import Image from "next/image";
 import MinimalistDock, { type DockItem } from "@/components/ui/minimal-dock";
 import BlobChatAssistant from "@/components/ui/BlobChatAssistant";
@@ -134,6 +134,12 @@ export default function ConnectSection() {
       icon: <LinkedInIcon className="w-6 h-6 text-[#38bdf8]" />,
       label: "LinkedIn: Mohit Kumar",
       href: "https://www.linkedin.com/in/mohit-kumar-339a84330",
+    },
+    {
+      id: "resume",
+      icon: <Download size={24} className="text-[#e8814a]" />,
+      label: "Download Resume",
+      href: "/resume.pdf",
     },
   ];
 

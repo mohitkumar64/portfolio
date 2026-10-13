@@ -193,6 +193,7 @@ export default function HowIBuildSection() {
   const [nodes, setNodes] = useState<WorkflowNode[]>(INITIAL_NODES);
   const [connections, setConnections] = useState<WorkflowConnection[]>(INITIAL_CONNECTIONS);
   const [hoveredConnId, setHoveredConnId] = useState<string | null>(null);
+  const [exploreHintDismissed, setExploreHintDismissed] = useState(false);
 
   // Drag tracking refs
   const dragStartPos = useRef<{ x: number; y: number } | null>(null);
@@ -254,6 +255,7 @@ export default function HowIBuildSection() {
 
   // Handle Drag Start
   const handleDragStart = (nodeId: string) => {
+    setExploreHintDismissed(true);
     draggingNodeId.current = nodeId;
     const node = nodes.find((n) => n.id === nodeId);
     if (node) {
@@ -373,7 +375,7 @@ export default function HowIBuildSection() {
             />
             {isBroken
               ? "DISCONNECTED • PRODUCTION AT RISK"
-              : "METHODOLOGY → EXECUTION → IMPACT"}
+              : "PIPELINE ONLINE • METHODOLOGY → EXECUTION → IMPACT"}
           </motion.div>
 
           {/* dynamic heading */}
@@ -502,8 +504,22 @@ export default function HowIBuildSection() {
                 </button>
               </div>
             </div>
+                </motion.div>
+
+          {!isBroken && viewMode === "horizontal" && !exploreHintDismissed && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={reduce ? { opacity: 1, y: 0 } : { opacity: 1, y: [8, 0, 0] }}
+              transition={{ duration: 0.9, ease, times: reduce ? undefined : [0, 0.65, 1] }}
+              className="mt-5 flex items-center gap-2 text-[10px] tracking-[0.16em] text-neutral-500 sm:text-[11px]"
+              style={{ fontFamily: mono }}
+              role="note"
+            >
+              <span aria-hidden className="text-[#e8814a]">↕</span>
+              <span>DRAG A CARD TO EXPLORE • SWIPE TO MOVE THROUGH THE PIPELINE</span>
+            </motion.div>
+          )}
           </motion.div>
-        </motion.div>
 
         {/* ── CONDITIONAL VIEW: HORIZONTAL CANVAS OR LIST PIPELINE ── */}
         {viewMode === "horizontal" ? (

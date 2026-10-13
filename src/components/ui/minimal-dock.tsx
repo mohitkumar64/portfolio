@@ -31,7 +31,7 @@ export const DockItemComponent: React.FC<DockItemProps> = ({ item, isHovered, on
     <div
       className={`
         relative flex items-center justify-center
-        w-14 h-14 rounded-2xl
+         w-20 h-15 sm:w-20 sm:h-20 rounded-2xl
         bg-white/5 backdrop-blur-[2px]
         border border-white/10
         transition-all duration-300 ease-out
@@ -115,7 +115,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
     <div className={`relative ${className}`}>
       {/* Dock Container */}
       <div className={`
-        flex items-end gap-4 px-7 py-5
+         grid grid-cols-3 gap-2 px-3 py-3 sm:flex sm:items-end sm:gap-4 sm:px-7 sm:py-5
         rounded-2xl
         bg-black/40 backdrop-blur-xl
         border border-white/10
@@ -148,7 +148,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
         }}
       >
         <div className={`
-          flex items-start gap-4 px-7 py-5
+           grid grid-cols-3 gap-2 px-3 py-3 sm:flex sm:items-start sm:gap-4 sm:px-7 sm:py-5
           rounded-2xl
           bg-black/20 backdrop-blur-xl
           border border-white/5
@@ -162,7 +162,7 @@ const MinimalistDock: React.FC<MinimalistDockProps> = ({ items = defaultDockItem
               key={`reflection-${item.id}`}
               className={`
                 flex items-center justify-center
-                w-14 h-14 rounded-2xl
+                 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl
                 bg-white/5
                 transition-all duration-300 ease-out
                 ${hoveredItem === item.id

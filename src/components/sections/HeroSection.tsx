@@ -245,6 +245,30 @@ export default function HeroSection() {
             </span>
           </motion.p>
 
+          {/* Compact proof strip: grounded in the focus areas shown below. */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, ease, delay: 0.78 }}
+            className="flex flex-wrap items-center gap-x-3 gap-y-2"
+            aria-label="Focus areas: full stack, AI and machine learning, real-time systems"
+          >
+            {["FULL STACK", "AI / ML", "REAL-TIME SYSTEMS"].map((fact, index) => (
+              <span
+                key={fact}
+                className="flex items-center gap-2 text-[10px] tracking-[0.16em] text-neutral-300/80 sm:text-[11px]"
+                style={{ fontFamily: mono }}
+              >
+                {index > 0 && (
+                  <span aria-hidden className="text-[#e8814a]/70">
+                    /
+                  </span>
+                )}
+                <span>{fact}</span>
+              </span>
+            ))}
+          </motion.div>
+
           {/* CTA */}
           <motion.a
             href="#projects"

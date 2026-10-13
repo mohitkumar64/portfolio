@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Home, User, FolderKanban, Layers, Send } from "lucide-react";
+import { Home, User, FolderKanban, Layers, Workflow, Send } from "lucide-react";
 import Image from "next/image";
 
 const navItems = [
@@ -10,11 +10,12 @@ const navItems = [
   { label: "About Me", icon: User, href: "#about" },
   { label: "Projects", icon: FolderKanban, href: "#projects" },
   { label: "Skills", icon: Layers, href: "#skills" },
+  { label: "How I Build", icon: Workflow, href: "#how-i-build" },
   { label: "Connect", icon: Send, href: "#connect", accent: true },
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const LABEL_WIDTH = 72;
+const LABEL_WIDTH = 82;
 
 /* Scroll-spy: index of the section currently in view */
 function useActiveSection() {
@@ -217,7 +218,7 @@ function BottomPillNav() {
       transition={{ type: "spring", stiffness: 260, damping: 24, delay: 0.5 }}
     >
       <div
-        className="flex items-center"
+        className="flex max-w-[calc(100vw-16px)] items-center overflow-x-auto"
         style={{
           gap: 4,
           padding: "6px 8px",

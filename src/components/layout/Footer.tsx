@@ -24,7 +24,8 @@ const NAV_LINKS = [
   { label: "01 / About Me", href: "#about" },
   { label: "02 / Projects", href: "#projects" },
   { label: "03 / Skills", href: "#skills" },
-  { label: "04 / Connect", href: "#connect" },
+  { label: "04 / How I Build", href: "#how-i-build" },
+  { label: "05 / Connect", href: "#connect" },
 ];
 
 export default function Footer() {

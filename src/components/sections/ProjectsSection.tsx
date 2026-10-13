@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import InteractiveSelector from "@/components/ui/interactive-selector";
 
 const grotesk = "var(--font-space-grotesk, 'Space Grotesk'), sans-serif";
@@ -31,6 +31,7 @@ const container: Variants = {
 };
 
 export default function ProjectsSection() {
+  const reduce = !!useReducedMotion();
   const ref = useRef<HTMLElement>(null);
 
   return (
@@ -132,7 +133,7 @@ export default function ProjectsSection() {
                   backgroundClip: "text",
                   color: "transparent",
                 }}
-                animate={{ backgroundPosition: ["0% 0%", "100% 0%"] }}
+                 animate={reduce ? undefined : { backgroundPosition: ["0% 0%", "100% 0%"] }}
                 transition={{
                   duration: 4.5,
                   ease: "easeInOut",
